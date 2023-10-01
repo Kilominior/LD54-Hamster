@@ -7,22 +7,30 @@ using UnityEngine.EventSystems;
 public class MouseController : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private MouseLegController mouseLeg;
     public float moveSpeed = 0.6f;          // 行动速度
-    public float rushSpeedY = 200f;         // Y方向的冲撞速度
-    public float rushSpeedX = 300f;         // Y方向的冲撞速度
+    public float rushSpeedY = 300f;         // Y方向的冲撞速度
+    public float rushSpeedX = 600f;         // Y方向的冲撞速度
+    public bool rushCooling;                // X方向冲刺是否正在冷却
+    public float rushCDofX = 1.0f;          // X方向冲刺的冷却时间
 
     private float InputSpeedX;              // X方向的力
     private Vector3 rushForceX;             // X方向的冲撞力
     private Vector3 rushForceY;             // Y方向的冲撞力
     private Vector3 force;                  // 总力
 
+    public bool isDoubleJump;                         // 判定是否允许二段跳
     private double lastLeftTime;                      // 上一次按左的时间
-    private double lastRightTime;                      // 上一次按右的时间
-    public float doublePressTime = 0.2f;               // 判定双击的时间间隔
+    private double lastRightTime;                     // 上一次按右的时间
+    public float doublePressTime = 0.2f;              // 判定双击的时间间隔
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();
+
+        rushCooling = false;
+        isDoubleJump = false;
         lastLeftTime = 0;
         lastRightTime = 0;
     }
@@ -76,12 +84,25 @@ public class MouseController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
-            Debug.Log("Rush to Up");
-            rushForceY = new(0, rushSpeedY);
-            rb.AddForce(rushForceY, ForceMode2D.Force);
+            if (mouseLeg.onGround)
+            {
+                Debug.Log("Rush to Up");
+                isDoubleJump = true;
+                rushForceY = new(0, rushSpeedY);
+                rb.AddForce(rushForceY, ForceMode2D.Force);
+                return;
+            }
+            if (isDoubleJump)
+            {
+                Debug.Log("Double Rush to Up");
+                isDoubleJump = false;
+                rushForceY = new(0, rushSpeedY);
+                rb.AddForce(rushForceY, ForceMode2D.Force);
+            }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
+            if (mouseLeg.onGround) return;
             Debug.Log("Rush to Bottom");
             rushForceY = new(0, -rushSpeedY);
             rb.AddForce(rushForceY, ForceMode2D.Force);
@@ -91,10 +112,13 @@ public class MouseController : MonoBehaviour
     // 左右冲刺
     private void RushX(bool toRight)
     {
+        if (rushCooling) return;
         Debug.Log("Rush to " + (toRight ? "Right" : "Left"));
         if (toRight) rushForceX = new(rushSpeedX, 0);
         else rushForceX = new(-rushSpeedX, 0);
         rb.AddForce(rushForceX, ForceMode2D.Force);
+        rushCooling = true;
+        StartCoroutine(nameof(rushCoolDown));
     }
 
     // 双击左右键触发冲撞
@@ -119,6 +143,12 @@ public class MouseController : MonoBehaviour
                 lastRightTime = Time.realtimeSinceStartup;
             }
         }
+    }
+
+    private IEnumerator rushCoolDown()
+    {
+        yield return new WaitForSeconds(rushCDofX);
+        rushCooling = false;
     }
 
 }
