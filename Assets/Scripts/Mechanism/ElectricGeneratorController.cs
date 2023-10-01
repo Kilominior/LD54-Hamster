@@ -11,11 +11,16 @@ public class ElectricGeneratorController : MonoBehaviour
 
     public bool hasBallIn;                 // 仓鼠球已固定
     public GameObject ball;                // 仓鼠球，若初始其中就有球请挂载
+    public float exitTime = 0.5f;          // 判定仓鼠球离开前的等待时间
+    public float exitDistance = 0.32f;     // 判定仓鼠球离开的距离
+    public float returnTime = 1.0f;        // 判定仓鼠球离开后重新返回的等待时间
+    public bool exiting;                   // 当前球已离开，暂时不判定球的进入
 
     private void Start()
     {
         if(ball != null) hasBallIn = true;
         else hasBallIn = false;
+        exiting = false;
 
         pointParent = transform.Find("PointParent");
         lineRenderer = GetComponent<LineRenderer>();
@@ -38,7 +43,7 @@ public class ElectricGeneratorController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Ball" && !hasBallIn)
+        if(collision.tag == "Ball" && !hasBallIn && !exiting)
         {
             Debug.Log(name + ": Ball Detected!");
             ball = collision.gameObject;
@@ -48,15 +53,56 @@ public class ElectricGeneratorController : MonoBehaviour
         }
     }
 
+    // 在球到达发电机时自动吸附球
     private IEnumerator BallAbsorb(GameObject ball)
     {
-        while(true)
+        while((ball.transform.position - transform.position).magnitude > 0.1f)
         {
-            Vector2 absorbForce = (transform.position - ball.transform.position) * 100.0f;
+            Vector2 absorbForce = (transform.position - ball.transform.position) * 10.0f;
             ball.GetComponent<Rigidbody2D>().AddForce(absorbForce);
             yield return new WaitForEndOfFrame();
         }
-
+        ball.transform.position = transform.position;
+        ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
+        StartCoroutine(nameof (WaitForLock), ball);
         Debug.Log(name + ": Ball Locked!");
+    }
+
+    // 判定球离开前等待的时间
+    private IEnumerator WaitForLock(GameObject ball)
+    {
+        yield return new WaitForSeconds(exitTime);
+        StartCoroutine(nameof(BallControl), ball);
+    }
+
+    // 在锁定球后控制其水平位置，同时也判断仓鼠是否试图挣脱
+    private IEnumerator BallControl(GameObject ball)
+    {
+        ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
+        Vector3 distance;
+        while (hasBallIn)
+        {
+            distance = transform.position - ball.transform.position;
+            Debug.Log(distance.magnitude);
+            if (distance.magnitude >= exitDistance)
+            {
+                Debug.Log(name + ": Ball Let Go!");
+                exiting = true;
+                StopCoroutine(nameof(WaitForExit));
+                StartCoroutine(nameof(WaitForExit));
+                ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+                hasBallIn = false; break;
+            }
+            Vector2 absorbForce = (distance) * 60.0f;
+            ball.GetComponent<Rigidbody2D>().AddForce(absorbForce);
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
+    // 球离开后重新判定球进入前的等待时间
+    private IEnumerator WaitForExit()
+    {
+        yield return new WaitForSeconds(returnTime);
+        exiting = false;
     }
 }
