@@ -4,15 +4,14 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public float MAXHP = 100f;      // 最大生命值
+    public float HP;                // 当前生命值
+
+
     void Start()
     {
-        
+        HP = MAXHP;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+
 }

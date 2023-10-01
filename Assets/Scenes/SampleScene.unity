@@ -218,6 +218,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &419356444
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 419356445}
+  m_Layer: 0
+  m_Name: LampBulbs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &419356445
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 419356444}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.7813294, y: 0.9507688, z: 0.06854193}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1596849881}
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &511331331
 GameObject:
   m_ObjectHideFlags: 0
@@ -1139,6 +1171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectedObject: {fileID: 1596849879}
+  objectActivated: 0
   LinePoints: []
   hasBallIn: 0
   ball: {fileID: 0}
@@ -1146,6 +1179,8 @@ MonoBehaviour:
   exitDistance: 0.32
   returnTime: 1
   exiting: 0
+  generateVelocity: 600
+  generateRound: 3
 --- !u!1 &1091978313
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,6 +1555,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1596849881}
   - component: {fileID: 1596849880}
+  - component: {fileID: 1596849882}
   m_Layer: 0
   m_Name: LampBulb
   m_TagString: Untagged
@@ -1586,15 +1622,29 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1596849879}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.53, y: -3.44, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.7486708, y: -4.390769, z: -0.06854193}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 511331332}
-  m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_Father: {fileID: 419356445}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1596849882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1596849879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 940e27e7a7d887745a3611f2fd8039cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  darkSprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  lightSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!1 &1805708486
 GameObject:
   m_ObjectHideFlags: 0
@@ -1607,7 +1657,7 @@ GameObject:
   - component: {fileID: 1805708489}
   - component: {fileID: 1805708488}
   m_Layer: 0
-  m_Name: Square
+  m_Name: Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2121,3 +2171,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fdd4eda06463f24f84728f2484476f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAXHP: 100
+  HP: 0
