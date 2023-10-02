@@ -8,6 +8,7 @@ public class ElectricGeneratorController : MonoBehaviour
     public GameObject connectedObject;     // 与本发电机相连的物体
     public bool objectActivated;           // 物体开关状态
 
+    private Vector3 centerPoint;           // 电机的中心位置
     public List<Transform> LinePoints;     // 电线的节点
     private Transform pointParent;         // 电线节点父物体
     private LineRenderer lineRenderer;     // 电线绘制器
@@ -26,10 +27,11 @@ public class ElectricGeneratorController : MonoBehaviour
 
     private void Start()
     {
-        if(ball != null) hasBallIn = true;
+        if (ball != null) hasBallIn = true;
         else hasBallIn = false;
         exiting = false;
 
+        centerPoint = transform.Find("Center").position;
         pointParent = transform.Find("PointParent");
         lineRenderer = GetComponent<LineRenderer>();
 
@@ -59,21 +61,38 @@ public class ElectricGeneratorController : MonoBehaviour
         // 电灯
         if (connectedObject.GetComponent<LampController>())
         {
-            if(objectActivated)
+            if (objectActivated)
+            {
                 connectedObject.GetComponent<LampController>().GetComponent<SpriteRenderer>().sprite
                 = connectedObject.GetComponent<LampController>().lightSprite;
+                connectedObject.GetComponent<LampController>().EnableLight();
+            }
             else
+            {
                 connectedObject.GetComponent<LampController>().GetComponent<SpriteRenderer>().sprite
                 = connectedObject.GetComponent<LampController>().darkSprite;
+                connectedObject.GetComponent<LampController>().DisableLight();
+            }
         }
-
-
-
+        else if (connectedObject.GetComponent<LiftController>())
+        {
+            if (objectActivated)
+                connectedObject.GetComponent<LiftController>().StartMove();
+            else
+                connectedObject.GetComponent<LiftController>().StopMove();
+        }
+        else if (connectedObject.GetComponent<VehicleController>())
+        {
+            if (objectActivated)
+                connectedObject.GetComponent<VehicleController>().StartMove();
+            // else
+            //     connectedObject.GetComponent<LiftController>().StopMove();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Ball" && !hasBallIn && !exiting)
+        if (collision.tag == "Ball" && !hasBallIn && !exiting)
         {
             Debug.Log(name + ": Ball Detected!");
             ball = collision.gameObject;
@@ -86,15 +105,15 @@ public class ElectricGeneratorController : MonoBehaviour
     // 在球到达发电机时自动吸附球
     private IEnumerator BallAbsorb(GameObject ball)
     {
-        while((ball.transform.position - transform.position).magnitude > 0.1f)
+        while ((ball.transform.position - centerPoint).magnitude > 0.1f)
         {
-            Vector2 absorbForce = (transform.position - ball.transform.position) * 10.0f;
+            Vector2 absorbForce = (centerPoint - ball.transform.position) * 10.0f;
             ball.GetComponent<Rigidbody2D>().AddForce(absorbForce);
             yield return new WaitForEndOfFrame();
         }
-        ball.transform.position = transform.position;
+        ball.transform.position = centerPoint;
         ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePosition;
-        StartCoroutine(nameof (WaitForLock), ball);
+        StartCoroutine(nameof(WaitForLock), ball);
         Debug.Log(name + ": Ball Locked!");
     }
 
@@ -115,7 +134,7 @@ public class ElectricGeneratorController : MonoBehaviour
         while (hasBallIn)
         {
             // 离开判定
-            distance = transform.position - ball.transform.position;
+            distance = centerPoint - ball.transform.position;
             //Debug.Log(distance.magnitude);
             if (distance.magnitude >= exitDistance)
             {
@@ -132,15 +151,15 @@ public class ElectricGeneratorController : MonoBehaviour
             ball.GetComponent<Rigidbody2D>().AddForce(absorbForce);
 
             // 发电判定
-            if(ball.transform.rotation == inRotation)
+            if (ball.transform.rotation == inRotation)
             {
                 roundNow++;
             }
             // 成功发电时使得连接的电器开或关
-            if(roundNow >= generateRound && Mathf.Abs(ball.GetComponent<Rigidbody2D>().angularVelocity) >= generateVelocity)
+            if (roundNow >= generateRound && Mathf.Abs(ball.GetComponent<Rigidbody2D>().angularVelocity) >= generateVelocity)
             {
                 Debug.Log(name + "Electricity Generated!");
-                if(objectActivated) objectActivated = false;
+                if (objectActivated) objectActivated = false;
                 else objectActivated = true;
                 UpdateActivatedStatus();
                 roundNow = 0;
