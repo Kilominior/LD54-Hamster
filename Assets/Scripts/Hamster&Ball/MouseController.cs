@@ -1,3 +1,5 @@
+using Spine;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,10 +26,15 @@ public class MouseController : MonoBehaviour
     private double lastRightTime;                     // 上一次按右的时间
     public float doublePressTime = 0.2f;              // 判定双击的时间间隔
 
+    private SkeletonAnimation skeleton;
+    private SpriteRenderer sr;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();
+        skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
+        sr = GetComponent<SpriteRenderer>();
 
         rushCooling = false;
         isDoubleJump = false;
@@ -43,39 +50,35 @@ public class MouseController : MonoBehaviour
         DoublePress(KeyCode.D, KeyCode.RightArrow);
 
         RushY();
+
+        // 动画
+        if (skeleton.AnimationState.GetCurrent(0).IsComplete)
+        {
+            skeleton.AnimationState.SetEmptyAnimation(1, 0.2f);
+            if (GetComponent<SpriteRenderer>().flipX)
+            {
+                skeleton.AnimationState.SetAnimation(0, "idel_left", true);
+            }
+            else
+            {
+                skeleton.AnimationState.SetAnimation(0, "idel_right", true);
+            }
+        }
     }
 
     // 左右移动
     private void Movement()
     {
-        InputSpeedX = Input.GetAxisRaw("Horizontal");
+        InputSpeedX = Input.GetAxis("Horizontal");
         force = new(InputSpeedX * moveSpeed, 0);
         rb.AddForce(force, ForceMode2D.Force);
 
         if (force != Vector3.zero)
-        {/*
+        {
+            // 动画
             if (skeleton.AnimationState.GetCurrent(1) == null
                 || skeleton.AnimationState.GetCurrent(1).IsComplete)
-            {
-                if (force.x < 0)
-                {
-                    if (!GetComponent<SpriteRenderer>().flipX)
-                    {
-                        GetComponent<SpriteRenderer>().flipX = true;
-                        skeleton.AnimationState.SetAnimation(0, "turn", false);
-                    }
-                    skeleton.AnimationState.SetAnimation(1, "animation2", true);
-                }
-                else
-                {
-                    if (GetComponent<SpriteRenderer>().flipX)
-                    {
-                        GetComponent<SpriteRenderer>().flipX = false;
-                        skeleton.AnimationState.SetAnimation(0, "turn_back", false);
-                    }
-                    skeleton.AnimationState.SetAnimation(1, "animation", true);
-                }
-            }*/
+                AniPlayX(force.x, "run_left", "run_right", 1, true);
         }
     }
 
@@ -90,6 +93,7 @@ public class MouseController : MonoBehaviour
                 isDoubleJump = true;
                 rushForceY = new(0, rushSpeedY);
                 rb.AddForce(rushForceY, ForceMode2D.Force);
+                AniPlayY("jump_left", "jump_right");
                 return;
             }
             if (isDoubleJump)
@@ -98,6 +102,8 @@ public class MouseController : MonoBehaviour
                 isDoubleJump = false;
                 rushForceY = new(0, rushSpeedY);
                 rb.AddForce(rushForceY, ForceMode2D.Force);
+                AniPlayY("jump_left", "jump_right");
+                return;
             }
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
@@ -106,7 +112,38 @@ public class MouseController : MonoBehaviour
             Debug.Log("Rush to Bottom");
             rushForceY = new(0, -rushSpeedY);
             rb.AddForce(rushForceY, ForceMode2D.Force);
+            AniPlayY("strike_down_left", "strike_down_right");
         }
+    }
+
+    // X轴向动画播放方法
+    private void AniPlayX(float forceX, string leftName, string rightName, int track = 1, bool loop = false)
+    {
+        if (forceX < 0)
+        {
+            if (!sr.flipX)
+            {
+                sr.flipX = true;
+                //skeleton.AnimationState.SetAnimation(0, "turn", false);
+            }
+            skeleton.AnimationState.SetAnimation(track, leftName, loop);
+        }
+        else
+        {
+            if (sr.flipX)
+            {
+                sr.flipX = false;
+                //skeleton.AnimationState.SetAnimation(0, "turn_back", false);
+            }
+            skeleton.AnimationState.SetAnimation(track, rightName, loop);
+        }
+    }
+
+    // Y轴向动画播放方法
+    private void AniPlayY(string leftName, string rightName, int track = 1, bool loop = false)
+    {
+        if (sr.flipX) skeleton.AnimationState.SetAnimation(track, leftName, loop);
+        else skeleton.AnimationState.SetAnimation(track, rightName, loop);
     }
 
     // 左右冲刺
@@ -117,6 +154,7 @@ public class MouseController : MonoBehaviour
         if (toRight) rushForceX = new(rushSpeedX, 0);
         else rushForceX = new(-rushSpeedX, 0);
         rb.AddForce(rushForceX, ForceMode2D.Force);
+        AniPlayX(rushForceX.x, "strike_left", "strike_right");
         rushCooling = true;
         StartCoroutine(nameof(rushCoolDown));
     }

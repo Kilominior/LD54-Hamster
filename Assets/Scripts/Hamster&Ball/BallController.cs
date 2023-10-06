@@ -5,12 +5,14 @@ using UnityEngine.UI;
 
 public class BallController : MonoBehaviour
 {
+    public delegate void HealthChangeEventHandler(float percentage);
+    public static event HealthChangeEventHandler OnHealthChangeEvent;
     public float MAXHP = 100f;      // 最大生命值
     public float HP;                // 当前生命值
     public Sprite[] ballSprites;
-    // public Image healthImage;
-    // public Image healthDelayImage;
+
     public PanelManager panelManager;
+    // public CameraShake virtualCamera;
     private SpriteRenderer sr;
 
     private void Start()
@@ -20,18 +22,10 @@ public class BallController : MonoBehaviour
         HP = MAXHP;
     }
 
-    private void Update()
-    {
-        // if (healthDelayImage.fillAmount > healthImage.fillAmount)
-        // {
-        //     healthDelayImage.fillAmount -= Time.deltaTime;
-        // }
-    }
-
     public void GetDamage(float amount)
     {
         HP -= amount;
-        if (HP < 0)
+        if (HP <= 0)
         {
             HP = 0;
             StartCoroutine(BallBreak());
@@ -44,7 +38,8 @@ public class BallController : MonoBehaviour
 
     public void OnHealthChange(float percentage)
     {
-        // healthImage.fillAmount = percentage;
+        // 触发事件
+        OnHealthChangeEvent?.Invoke(percentage);
     }
 
     private void ChangeBallSprite()
@@ -59,14 +54,10 @@ public class BallController : MonoBehaviour
             sr.sprite = ballSprites[1];
     }
 
-    // private void BallBreak()
-    // {
-    //     panelManager.EnableVictoryPanel();
-    //     this.gameObject.SetActive(false);
-    // }
     IEnumerator BallBreak()
     {
         this.gameObject.GetComponent<Collider2D>().enabled = false;
+        this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds(1f);
         panelManager.EnableVictoryPanel();
     }

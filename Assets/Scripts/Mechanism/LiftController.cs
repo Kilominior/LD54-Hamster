@@ -7,33 +7,37 @@ public class LiftController : MonoBehaviour
 {
     public GameObject[] points;
     public float moveSpeed;
-    public GameObject player;
-    public GameObject pressurePlate;
+    // public GameObject player;
+    // public GameObject pressurePlate;
 
-    private bool isPlayerOnLift = false;
+    private bool isMoving;
     private Transform destination;
-    private ObjectCheck objectCheck;
+    // private ObjectCheck objectCheck;
 
     private void Start()
     {
-        if (pressurePlate != null)
-        {
-            objectCheck = pressurePlate.GetComponent<ObjectCheck>();
-            // 订阅按下事件
-            objectCheck.OnPlatePressed += StartMove;
+        // isPlayerOnLift = false;
+        // if (pressurePlate != null)
+        // {
+        //     objectCheck = pressurePlate.GetComponent<ObjectCheck>();
+        //     // 订阅按下事件
+        //     objectCheck.OnPlatePressed += StartMove;
 
-            // 订阅释放事件
-            // objectCheck.OnPlateReleased += OnPlateReleased;
-        }
-        else
-        {
-            Debug.LogError("ObjectCheck component not found on this object.");
-        }
+        //     // 订阅释放事件
+        //     // objectCheck.OnPlateReleased += OnPlateReleased;
+        // }
+        // else
+        // {
+        //     Debug.LogError("ObjectCheck component not found on this object.");
+        // }
+
+        GetComponent<LineRenderer>().SetPosition(0, points[0].transform.position);
+        GetComponent<LineRenderer>().SetPosition(1, points[1].transform.position);
     }
 
     public void StartMove()
     {
-        isPlayerOnLift = true;
+        isMoving = true;
 
         // 设置电梯的目的地
         if (transform.position == points[0].transform.position)
@@ -48,15 +52,13 @@ public class LiftController : MonoBehaviour
 
     public void StopMove()
     {
-        isPlayerOnLift = false;
+        isMoving = false;
     }
 
     private void Update()
     {
-        if (isPlayerOnLift)
-        {
+        if (isMoving)
             MoveLift();
-        }
     }
 
     private void SetDestination(Transform destination)

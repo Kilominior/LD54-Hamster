@@ -7,18 +7,10 @@ public class LampController : MonoBehaviour
     public Sprite darkSprite;
     public Sprite lightSprite;
 
-    private void Awake()
+    public bool IsLighted()
     {
-        DisableLight();
-    }
-
-    public void EnableLight()
-    {
-        this.GetComponent<Light>().enabled = true;
-    }
-
-    public void DisableLight()
-    {
-        this.GetComponent<Light>().enabled = false;
+        if (GetComponent<SpriteRenderer>().sprite == lightSprite)
+            return true;
+        return false;
     }
 }

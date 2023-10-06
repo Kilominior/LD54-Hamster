@@ -72,8 +72,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1051768717
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: f3ec8ab7fdc8a654b8a9263c3c6268c9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -103,14 +103,14 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.282, y: 3.602}
+    oldSize: {x: 0.641, y: 1.801}
     newSize: {x: 1.282, y: 3.602}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.282, y: 3.602}
+  m_Size: {x: 0.641, y: 1.801}
   m_EdgeRadius: 0
 --- !u!50 &1769546447363655327
 Rigidbody2D:
