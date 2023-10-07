@@ -2,7 +2,7 @@
 A unity based game about hamster.
 *Unity Version:2021.3.29f1c1*
 
-*![Title640x512](D:\Projects\Unity Projects\LD54-Hamster\Imgs\Title640x512.png)*
+*![Title640x512](Imgs\Title640x512.png)*
 
 
 
@@ -26,10 +26,10 @@ In ***Rodent Rolling Rampage***, you need to act **a hamster in a sturdy hamster
 
 #### Screenshots:
 
-![p1](D:\Projects\Unity Projects\LD54-Hamster\Imgs\p1.png)
+![p1](Imgs\p1.png)
 
-![p2](D:\Projects\Unity Projects\LD54-Hamster\Imgs\p2.png)
+![p2](Imgs\p2.png)
 
-![p3](D:\Projects\Unity Projects\LD54-Hamster\Imgs\p3.png)
+![p3](Imgs\p3.png)
 
-![p4](D:\Projects\Unity Projects\LD54-Hamster\Imgs\p4.png)
+![p4](Imgs\p4.png)
