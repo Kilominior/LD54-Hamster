@@ -14,10 +14,13 @@ public class CannonController : MonoBehaviour
     private bool isShooting = false;
     private bool canShoot = true;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
         hamster = GameObject.FindGameObjectWithTag("Player");
         ball = GameObject.FindGameObjectWithTag("Ball");
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -65,6 +68,7 @@ public class CannonController : MonoBehaviour
         direction.Normalize();
 
         // 发射球，并启用控制
+        audioSource.Play();
         ball.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         hamster.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         ball.GetComponent<Rigidbody2D>().AddForce(direction * shootForce, ForceMode2D.Impulse);

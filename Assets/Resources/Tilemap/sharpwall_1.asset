@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: sharpwall_1
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 1111308963, guid: fc60ed6b51a5ecb48b50b498794c46e9, type: 3}
+  m_Sprite: {fileID: 69898290, guid: 239639fcb61c44c7fb36a0d9db03eba6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

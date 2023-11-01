@@ -12,4 +12,9 @@ public class SceneLoader : MonoBehaviour
         // isLoading = true;
         SceneManager.LoadSceneAsync(sceneName);
     }
+
+    public void LoadCurrentScene()
+    {
+        LoadScene(SceneManager.GetActiveScene().name);
+    }
 }

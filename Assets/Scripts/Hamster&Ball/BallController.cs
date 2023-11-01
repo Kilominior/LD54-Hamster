@@ -15,16 +15,20 @@ public class BallController : MonoBehaviour
     // public CameraShake virtualCamera;
     private SpriteRenderer sr;
 
+    private AudioSource audioSource;
+
     private void Start()
     {
         sr = this.GetComponent<SpriteRenderer>();
         sr.sprite = ballSprites[0];
         HP = MAXHP;
+        audioSource = GetComponent<AudioSource>();
     }
 
     public void GetDamage(float amount)
     {
-        HP -= amount;
+        HP -= amount * 0.9f;
+        audioSource.Play();
         if (HP <= 0)
         {
             HP = 0;

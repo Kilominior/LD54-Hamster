@@ -7,6 +7,7 @@ public class LiftController : MonoBehaviour
 {
     public GameObject[] points;
     public float moveSpeed;
+    public bool isMoveOnce;
     // public GameObject player;
     // public GameObject pressurePlate;
 
@@ -73,7 +74,10 @@ public class LiftController : MonoBehaviour
 
         if (transform.position == destination.position)
         {
-            StartMove();
+            if (isMoveOnce)
+                StopMove();
+            else
+                StartMove();
             // isPlayerOnElevator = false;
 
             // 恢复

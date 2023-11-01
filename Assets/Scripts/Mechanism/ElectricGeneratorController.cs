@@ -32,6 +32,9 @@ public class ElectricGeneratorController : MonoBehaviour
     private bool hasRotated;               // 曾经到达对角处，此次旋转合法
     public float angleBias = 1f;           // 判定旋转一周的角度偏移量
 
+    private AudioSource audioSource;
+    public AudioClip[] clips;
+
     private void Start()
     {
         if (objectActivated) GetComponent<SpriteRenderer>().sprite = lightSprite;
@@ -63,6 +66,8 @@ public class ElectricGeneratorController : MonoBehaviour
         lineRenderer.SetPosition(LinePoints.Count - 1, LinePoints[LinePoints.Count - 1].position);
 
         UpdateActivatedStatus();
+
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -168,6 +173,7 @@ public class ElectricGeneratorController : MonoBehaviour
     // 在锁定球后控制其水平位置，同时也判断仓鼠是否试图挣脱
     private IEnumerator BallControl(GameObject ball)
     {
+        AudioPlay(0);
         // 置于电梯上的发电机不锁定仓鼠球Y轴
         if (transform.parent.GetComponent<LiftController>())
             ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
@@ -212,6 +218,8 @@ public class ElectricGeneratorController : MonoBehaviour
             {
                 roundNow++;
                 Debug.Log(name + ": Round: " + roundNow + " Finished.");
+                if (roundNow < generateRound) AudioPlay(1);
+                else AudioPlay(2);
                 hasRotated = false;
             }
             // 成功发电时使得连接的电器开或关
@@ -235,5 +243,11 @@ public class ElectricGeneratorController : MonoBehaviour
         rotateSignal.SetActive(false);
         yield return new WaitForSeconds(returnTime);
         exiting = false;
+    }
+
+    private void AudioPlay(int i)
+    {
+        audioSource.clip = clips[i];
+        audioSource.Play();
     }
 }
