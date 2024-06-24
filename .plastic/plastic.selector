@@ -1,4 +1,0 @@
-repository "LD54-Hamster@peoples-gj@cloud.cn"
-  path "/"
-    smartbranch "/main" 
-     
