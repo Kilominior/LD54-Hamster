@@ -1,33 +1,68 @@
 using Spine;
-using Spine.Unity;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using static UnityEngine.InputSystem.InputAction;
+using Spine.Unity;
 
 public class MouseController : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    // 鼠/球状态
+    public enum PlayerState
+    {
+        Ball,
+        Hamster
+    }
+    // 当前所在的状态
+    private PlayerState currentState;
+
+
     private MouseLegController mouseLeg;
-    public float moveSpeed = 0.6f;          // 行动速度
-    public float rushSpeedY = 300f;         // Y方向的冲撞速度
-    public float rushSpeedX = 600f;         // Y方向的冲撞速度
-    public bool rushCooling;                // X方向冲刺是否正在冷却
-    public float rushCDofX = 1.0f;          // X方向冲刺的冷却时间
+    // 行动速度
+    [SerializeField]
+    private float moveSpeed = 10f;
+    // Y方向的冲撞速度
+    [SerializeField]
+    private float JumpSpeed = 150f;
+    // Y方向的冲撞速度
+    [SerializeField]
+    private float rushSpeed = 200f;
+    // X方向冲刺是否正在冷却
+    private bool rushCooling;
+    // X方向冲刺的冷却时间
+    private float rushCD = 1.0f;          
 
-    private float InputSpeedX;              // X方向的力
-    private Vector3 rushForceX;             // X方向的冲撞力
-    private Vector3 rushForceY;             // Y方向的冲撞力
-    private Vector3 force;                  // 总力
+    // 移动时的力
+    private Vector2 moveForce;
+    // X方向的冲撞力
+    private Vector3 rushForceX;
+    // Y方向的冲撞力
+    private Vector3 JumpForce;
+    // 当前计算出的将要施加给鼠鼠的总力
+    private Vector3 force;
 
-    public bool isDoubleJump;                         // 判定是否允许二段跳
-    private double lastLeftTime;                      // 上一次按左的时间
-    private double lastRightTime;                     // 上一次按右的时间
-    public float doublePressTime = 0.2f;              // 判定双击的时间间隔
+    // 输入系统
+    private static readonly string ballAMName = "Player";
+    private static readonly string hamsterAMName = "Hamster";
+    private PlayerInput pi;
+    private InputActionMap ballAM;
+    private InputActionMap hamsterAM;
 
-    private SkeletonAnimation skeleton;
+    // 因有Move输入而正在移动中
+    private bool isMoving;
+    // 判定是否允许二段跳
+    public bool isDoubleJump;
+    // 上一次按左/右的时间
+    private double lastLeftTime;
+    private double lastRightTime;
+    // 判定双击的时间间隔
+    public float doublePressTime = 0.2f;
+
+    private Rigidbody2D rb;
     private SpriteRenderer sr;
+    private SkeletonAnimation skeleton;
 
     void Start()
     {
@@ -36,20 +71,58 @@ public class MouseController : MonoBehaviour
         skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
         sr = GetComponent<SpriteRenderer>();
 
+        ActionBinding();
+
         rushCooling = false;
         isDoubleJump = false;
         lastLeftTime = 0;
         lastRightTime = 0;
     }
 
+    private void ActionBinding()
+    {
+        pi = GetComponent<PlayerInput>();
+
+        ballAM = pi.actions.actionMaps[0];
+        hamsterAM = pi.actions.actionMaps[1];
+        ballAM["Move"].performed += OnMovePerformed;
+        ballAM["Move"].canceled += OnMoveCanceled;
+        ballAM["Jump"].performed += OnJumpPerformed;
+    }
+
+    private void StateSwitch()
+    {
+        if(currentState == PlayerState.Ball)
+        {
+            // 切换到鼠鼠状态
+            currentState = PlayerState.Hamster;
+            pi.SwitchCurrentActionMap(hamsterAMName);
+
+        }
+        else
+        {
+            // 切换到鼠球状态
+            currentState = PlayerState.Ball;
+            pi.SwitchCurrentActionMap(ballAMName);
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (isMoving)
+        {
+            Move();
+        }
+    }
+
     private void Update()
     {
-        Movement();
+        //Movement();
 
-        DoublePress(KeyCode.A, KeyCode.LeftArrow);
-        DoublePress(KeyCode.D, KeyCode.RightArrow);
+        //DoublePress(KeyCode.A, KeyCode.LeftArrow);
+        //DoublePress(KeyCode.D, KeyCode.RightArrow);
 
-        RushY();
+        //RushY();
 
         // 动画
         if (skeleton.AnimationState.GetCurrent(0).IsComplete)
@@ -67,10 +140,10 @@ public class MouseController : MonoBehaviour
     }
 
     // 左右移动
-    private void Movement()
+    private void Move()
     {
-        InputSpeedX = Input.GetAxis("Horizontal");
-        force = new(InputSpeedX * moveSpeed, 0);
+        force = moveForce * moveSpeed;
+        force.y = 0;
         rb.AddForce(force, ForceMode2D.Force);
 
         if (force != Vector3.zero)
@@ -82,6 +155,29 @@ public class MouseController : MonoBehaviour
         }
     }
 
+    private void OnMovePerformed(CallbackContext context)
+    {
+        isMoving = true;
+        moveForce = context.ReadValue<Vector2>();
+        //Debug.Log("Is moving: " + moveForce);
+    }
+
+    private void OnMoveCanceled(CallbackContext context)
+    {
+        isMoving = false;
+        //Debug.Log("Move canceled!");
+    }
+
+    private void OnJumpPerformed(CallbackContext context)
+    {
+        // 保证在地面上起跳
+        if (!mouseLeg.onGround) { return; }
+        JumpForce = new(0, JumpSpeed);
+        rb.AddForce(JumpForce, ForceMode2D.Force);
+        AniPlayY("jump_left", "jump_right");
+        //Debug.Log("Jump performed!");
+    }
+
     // 上下冲撞
     private void RushY()
     {
@@ -91,8 +187,8 @@ public class MouseController : MonoBehaviour
             {
                 Debug.Log("Rush to Up");
                 isDoubleJump = true;
-                rushForceY = new(0, rushSpeedY);
-                rb.AddForce(rushForceY, ForceMode2D.Force);
+                JumpForce = new(0, JumpSpeed);
+                rb.AddForce(JumpForce, ForceMode2D.Force);
                 AniPlayY("jump_left", "jump_right");
                 return;
             }
@@ -100,8 +196,8 @@ public class MouseController : MonoBehaviour
             {
                 Debug.Log("Double Rush to Up");
                 isDoubleJump = false;
-                rushForceY = new(0, rushSpeedY);
-                rb.AddForce(rushForceY, ForceMode2D.Force);
+                JumpForce = new(0, JumpSpeed);
+                rb.AddForce(JumpForce, ForceMode2D.Force);
                 AniPlayY("jump_left", "jump_right");
                 return;
             }
@@ -110,8 +206,8 @@ public class MouseController : MonoBehaviour
         {
             if (mouseLeg.onGround) return;
             Debug.Log("Rush to Bottom");
-            rushForceY = new(0, -rushSpeedY);
-            rb.AddForce(rushForceY, ForceMode2D.Force);
+            JumpForce = new(0, -JumpSpeed);
+            rb.AddForce(JumpForce, ForceMode2D.Force);
             AniPlayY("strike_down_left", "strike_down_right");
         }
     }
@@ -151,8 +247,8 @@ public class MouseController : MonoBehaviour
     {
         if (rushCooling) return;
         Debug.Log("Rush to " + (toRight ? "Right" : "Left"));
-        if (toRight) rushForceX = new(rushSpeedX, 0);
-        else rushForceX = new(-rushSpeedX, 0);
+        if (toRight) rushForceX = new(rushSpeed, 0);
+        else rushForceX = new(-rushSpeed, 0);
         rb.AddForce(rushForceX, ForceMode2D.Force);
         AniPlayX(rushForceX.x, "strike_left", "strike_right");
         rushCooling = true;
@@ -185,7 +281,7 @@ public class MouseController : MonoBehaviour
 
     private IEnumerator rushCoolDown()
     {
-        yield return new WaitForSeconds(rushCDofX);
+        yield return new WaitForSeconds(rushCD);
         rushCooling = false;
     }
 

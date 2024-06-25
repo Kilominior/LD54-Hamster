@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 5885025815904047131}
   - component: {fileID: 170404817321599716}
   - component: {fileID: 170404817321599717}
+  - component: {fileID: 5557501904877420831}
   m_Layer: 0
   m_Name: Mouse
   m_TagString: Player
@@ -264,12 +265,104 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  rushSpeedY: 300
+  rushSpeedY: 150
   rushSpeedX: 600
-  rushCooling: 0
-  rushCDofX: 1
   isDoubleJump: 0
   doublePressTime: 0.2
+--- !u!114 &5557501904877420831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170404817321599257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 0f802fccbf6177d4da4ca6503098c7af, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 39d5edb7-2bcc-41bc-b318-25197ce45d6e
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow,/Shaul
+      Eizikovich vJoy - Virtual Joystick/stick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 99afed8f-da3d-42a4-b351-feec45d8e0b2
+    m_ActionName: Player/Look[/Mouse/delta,/Pen/delta]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 81446a3e-1db2-421e-81ac-e0aaf292dbab
+    m_ActionName: Player/Fire[/Mouse/leftButton,/Shaul Eizikovich vJoy - Virtual
+      Joystick/trigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bbd6124e-60d1-4dee-b99b-f9511e17c931
+    m_ActionName: UI/Navigate[/Shaul Eizikovich vJoy - Virtual Joystick/stick/up,/Shaul
+      Eizikovich vJoy - Virtual Joystick/stick/down,/Shaul Eizikovich vJoy - Virtual
+      Joystick/stick/left,/Shaul Eizikovich vJoy - Virtual Joystick/stick/right,/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3ad72567-3070-4aca-87d4-1c005bfdc7e6
+    m_ActionName: UI/Submit[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e109a766-47a6-40a0-8617-a44b3661f7ef
+    m_ActionName: UI/Cancel[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d656c415-68ed-4e02-9dc5-84cf5e62a539
+    m_ActionName: UI/Point[/Mouse/position,/Pen/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 9b971f91-3d7e-49d0-b49a-dd019139c441
+    m_ActionName: UI/Click[/Mouse/leftButton,/Pen/tip]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d0d2e7b1-1220-40b6-b177-003ee75830fe
+    m_ActionName: UI/ScrollWheel[/Mouse/scroll]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 630e6cb6-a8c0-4dd3-b94b-02e4fbc4544d
+    m_ActionName: UI/MiddleClick[/Mouse/middleButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bd9ceffd-1cc1-4df5-a947-98de8a359f5c
+    m_ActionName: UI/RightClick[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 286b31e1-86e6-4db3-b09a-0d82dbdfe99f
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: ab806f18-ec8f-463c-ae91-337e8c6bb2e7
+    m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 12553771-0252-4fec-a0e0-d82dc060612c
+    m_ActionName: Hamster/New action
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: af718dfd-2fdb-4edf-97d6-16923fc8156b
+    m_ActionName: Player/Jump[/Keyboard/space]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1090256386285565617
 GameObject:
   m_ObjectHideFlags: 0
