@@ -5,24 +5,37 @@ using UnityEngine;
 public class MouseLegController : MonoBehaviour
 {
     public bool onGround;
+    private MouseController owner;
+    private int colliderCount;
 
     void Start()
     {
-        onGround = true;
+        onGround = false;
+        owner = transform.parent.GetComponent<MouseController>();
+        colliderCount = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Ball")
+        if(!collision.CompareTag("Ball") && !collision.CompareTag("Ground"))
         {
-            onGround = true;
-            // 一旦落地，二段跳自动无效
-            transform.parent.GetComponent<MouseController>().isDoubleJump = false;
+            return;
         }
+        //Debug.Log("In"+colliderCount);
+        colliderCount++;
+        onGround = true;
+        // 一旦落地，二段跳自动无效
+        owner.isDoubleJump = false;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Ball")
+        if (!collision.CompareTag("Ball") && !collision.CompareTag("Ground"))
+        {
+            return;
+        }
+        //Debug.Log("Out"+colliderCount);
+        colliderCount--;
+        if (colliderCount == 0)
         {
             onGround = false;
         }

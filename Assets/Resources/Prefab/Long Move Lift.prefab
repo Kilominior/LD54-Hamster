@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 6807093979784650633}
   m_Layer: 0
   m_Name: Lift
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -364,6 +364,7 @@ MonoBehaviour:
   - {fileID: 1622990006243233748}
   - {fileID: 1622990006578408617}
   moveSpeed: 1
+  isMoveOnce: 0
 --- !u!120 &6807093979784650633
 LineRenderer:
   m_ObjectHideFlags: 0

@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170404817153900781}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
-  m_LocalScale: {x: 0.6, y: 0.01, z: 1}
+  m_LocalPosition: {x: 0, y: -0.4305, z: 0}
+  m_LocalScale: {x: 1.12344, y: 0.149048, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 170404817321599258}
@@ -99,7 +99,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 5.6033626}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -110,7 +110,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 12.206727}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &170404817153900777
 MonoBehaviour:
@@ -264,9 +264,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b18fb979b9e2a043a904d76d331a8ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ball: {fileID: 0}
   moveSpeed: 10
-  rushSpeedY: 150
-  rushSpeedX: 600
+  JumpSpeed: 150
+  rushSpeed: 200
   isDoubleJump: 0
   doublePressTime: 0.2
 --- !u!114 &5557501904877420831
@@ -352,12 +353,23 @@ MonoBehaviour:
     m_ActionName: UI/TrackedDeviceOrientation
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 12553771-0252-4fec-a0e0-d82dc060612c
-    m_ActionName: Hamster/New action
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: af718dfd-2fdb-4edf-97d6-16923fc8156b
     m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2faa4d82-7775-4706-bbd4-05d2a5cecc97
+    m_ActionName: Hamster/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow,/Shaul
+      Eizikovich vJoy - Virtual Joystick/stick,/GreenAsia Inc.    USB Joystick    
+      /stick]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 05689d1a-bc16-4408-b647-db7e57c860ae
+    m_ActionName: Hamster/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c8aac3a4-8935-4fa8-af35-e01f67ccb375
+    m_ActionName: Hamster/Interact[/Keyboard/e,/Shaul Eizikovich vJoy - Virtual Joystick/trigger,/GreenAsia
+      Inc.    USB Joystick     /trigger]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

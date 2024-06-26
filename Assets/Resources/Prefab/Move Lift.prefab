@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 7834587662511135832}
   m_Layer: 0
   m_Name: Lift
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -363,8 +363,7 @@ MonoBehaviour:
   - {fileID: 1622990006243233748}
   - {fileID: 1622990006578408617}
   moveSpeed: 1
-  player: {fileID: 0}
-  pressurePlate: {fileID: 0}
+  isMoveOnce: 0
 --- !u!120 &7834587662511135832
 LineRenderer:
   m_ObjectHideFlags: 0

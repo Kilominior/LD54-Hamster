@@ -18,6 +18,9 @@ public class MouseController : MonoBehaviour
     // 当前所在的状态
     private PlayerState currentState;
 
+    public BallController ball;
+    private static readonly string ballPrefabPath = "Prefab/Ball";
+    private GameObject ballPrefab;
 
     private MouseLegController mouseLeg;
     // 行动速度
@@ -60,10 +63,15 @@ public class MouseController : MonoBehaviour
     // 判定双击的时间间隔
     public float doublePressTime = 0.2f;
 
+    // 当前可执行交互操作的对象
+    private IInteractable interactObject;
+    private bool interactLegal;
+
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private SkeletonAnimation skeleton;
 
+    #region LifeSpan
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -72,39 +80,14 @@ public class MouseController : MonoBehaviour
         sr = GetComponent<SpriteRenderer>();
 
         ActionBinding();
+        StateUpdateTo(PlayerState.Ball);
+
+        interactLegal = false;
 
         rushCooling = false;
         isDoubleJump = false;
         lastLeftTime = 0;
         lastRightTime = 0;
-    }
-
-    private void ActionBinding()
-    {
-        pi = GetComponent<PlayerInput>();
-
-        ballAM = pi.actions.actionMaps[0];
-        hamsterAM = pi.actions.actionMaps[1];
-        ballAM["Move"].performed += OnMovePerformed;
-        ballAM["Move"].canceled += OnMoveCanceled;
-        ballAM["Jump"].performed += OnJumpPerformed;
-    }
-
-    private void StateSwitch()
-    {
-        if(currentState == PlayerState.Ball)
-        {
-            // 切换到鼠鼠状态
-            currentState = PlayerState.Hamster;
-            pi.SwitchCurrentActionMap(hamsterAMName);
-
-        }
-        else
-        {
-            // 切换到鼠球状态
-            currentState = PlayerState.Ball;
-            pi.SwitchCurrentActionMap(ballAMName);
-        }
     }
 
     private void FixedUpdate()
@@ -138,21 +121,25 @@ public class MouseController : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    // 左右移动
-    private void Move()
+    #region Input
+    private void ActionBinding()
     {
-        force = moveForce * moveSpeed;
-        force.y = 0;
-        rb.AddForce(force, ForceMode2D.Force);
+        pi = GetComponent<PlayerInput>();
 
-        if (force != Vector3.zero)
-        {
-            // 动画
-            if (skeleton.AnimationState.GetCurrent(1) == null
-                || skeleton.AnimationState.GetCurrent(1).IsComplete)
-                AniPlayX(force.x, "run_left", "run_right", 1, true);
-        }
+        ballAM = pi.actions.actionMaps[0];
+        hamsterAM = pi.actions.actionMaps[1];
+
+        ballAM["Move"].performed += OnMovePerformed;
+        ballAM["Move"].canceled += OnMoveCanceled;
+        ballAM["Jump"].performed += OnJumpPerformed;
+        ballAM["Interact"].performed += OnInteractPerformed;
+
+        hamsterAM["Move"].performed += OnMovePerformed;
+        hamsterAM["Move"].canceled += OnMoveCanceled;
+        hamsterAM["Jump"].performed += OnJumpPerformed;
+        hamsterAM["Interact"].performed += OnInteractPerformed;
     }
 
     private void OnMovePerformed(CallbackContext context)
@@ -170,12 +157,92 @@ public class MouseController : MonoBehaviour
 
     private void OnJumpPerformed(CallbackContext context)
     {
+        Jump();
+        //Debug.Log("Jump performed!");
+    }
+
+    private void OnInteractPerformed(CallbackContext context)
+    {
+        ExecuteInteract();
+        //Debug.Log("Interact performed!");
+    }
+    #endregion
+
+    #region State & Interact
+    /// <summary>
+    /// 在鼠/球之间切换当前的状态
+    /// </summary>
+    public void StateSwitch()
+    {
+        if(currentState == PlayerState.Ball)
+        {
+            // 切换到鼠鼠状态
+            StateUpdateTo(PlayerState.Hamster);
+        }
+        else
+        {
+            // 切换到鼠球状态
+            StateUpdateTo(PlayerState.Ball);
+        }
+    }
+
+    /// <summary>
+    /// 将当前状态更新为目标状态
+    /// </summary>
+    /// <param name="targetState">目标状态</param>
+    private void StateUpdateTo(PlayerState targetState)
+    {
+        currentState = targetState;
+
+        if (targetState == PlayerState.Ball)
+        {
+            if (ballPrefab == null)
+            {
+                ballPrefab = Resources.Load<GameObject>(ballPrefabPath);
+            }
+            ball = Instantiate(ballPrefab, transform.position,
+                Quaternion.identity).GetComponent<BallController>();
+            pi.SwitchCurrentActionMap(ballAMName);
+        }
+        else
+        {
+            if (ball != null) Destroy(ball.gameObject);
+            pi.SwitchCurrentActionMap(hamsterAMName);
+        }
+    }
+
+    private void ExecuteInteract()
+    {
+        if (interactObject == null || !interactLegal) return;
+        interactObject.ExecuteInteract(this);
+        interactLegal = false;
+    }
+    #endregion
+
+    #region Movement
+    // 左右移动
+    private void Move()
+    {
+        force = moveForce * moveSpeed;
+        force.y = 0;
+        rb.AddForce(force, ForceMode2D.Force);
+
+        if (force != Vector3.zero)
+        {
+            // 动画
+            if (skeleton.AnimationState.GetCurrent(1) == null
+                || skeleton.AnimationState.GetCurrent(1).IsComplete)
+                AniPlayX(force.x, "run_left", "run_right", 1, true);
+        }
+    }
+
+    private void Jump()
+    {
         // 保证在地面上起跳
         if (!mouseLeg.onGround) { return; }
         JumpForce = new(0, JumpSpeed);
         rb.AddForce(JumpForce, ForceMode2D.Force);
         AniPlayY("jump_left", "jump_right");
-        //Debug.Log("Jump performed!");
     }
 
     // 上下冲撞
@@ -212,6 +279,51 @@ public class MouseController : MonoBehaviour
         }
     }
 
+    // 左右冲刺
+    private void RushX(bool toRight)
+    {
+        if (rushCooling) return;
+        Debug.Log("Rush to " + (toRight ? "Right" : "Left"));
+        if (toRight) rushForceX = new(rushSpeed, 0);
+        else rushForceX = new(-rushSpeed, 0);
+        rb.AddForce(rushForceX, ForceMode2D.Force);
+        AniPlayX(rushForceX.x, "strike_left", "strike_right");
+        rushCooling = true;
+        StartCoroutine(nameof(rushCoolDown));
+    }
+
+    // 双击左右键触发冲撞
+    private void DoublePress(KeyCode key0, KeyCode key1)
+    {
+        if (Input.GetKeyDown(key0) || Input.GetKeyDown(key1))
+        {
+            if (key0 == KeyCode.A)
+            {
+                if (Time.realtimeSinceStartup - lastLeftTime < doublePressTime)
+                {
+                    RushX(false);
+                }
+                lastLeftTime = Time.realtimeSinceStartup;
+            }
+            if (key0 == KeyCode.D)
+            {
+                if (Time.realtimeSinceStartup - lastRightTime < doublePressTime)
+                {
+                    RushX(true);
+                }
+                lastRightTime = Time.realtimeSinceStartup;
+            }
+        }
+    }
+
+    private IEnumerator rushCoolDown()
+    {
+        yield return new WaitForSeconds(rushCD);
+        rushCooling = false;
+    }
+    #endregion
+
+    #region Animation
     // X轴向动画播放方法
     private void AniPlayX(float forceX, string leftName, string rightName, int track = 1, bool loop = false)
     {
@@ -241,48 +353,29 @@ public class MouseController : MonoBehaviour
         if (sr.flipX) skeleton.AnimationState.SetAnimation(track, leftName, loop);
         else skeleton.AnimationState.SetAnimation(track, rightName, loop);
     }
+    #endregion
 
-    // 左右冲刺
-    private void RushX(bool toRight)
+    #region Collision
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (rushCooling) return;
-        Debug.Log("Rush to " + (toRight ? "Right" : "Left"));
-        if (toRight) rushForceX = new(rushSpeed, 0);
-        else rushForceX = new(-rushSpeed, 0);
-        rb.AddForce(rushForceX, ForceMode2D.Force);
-        AniPlayX(rushForceX.x, "strike_left", "strike_right");
-        rushCooling = true;
-        StartCoroutine(nameof(rushCoolDown));
-    }
-
-    // 双击左右键触发冲撞
-    private void DoublePress(KeyCode key0, KeyCode key1)
-    {
-        if (Input.GetKeyDown(key0) || Input.GetKeyDown(key1))
+        // 接触可交互物体，判断是否允许进行交互
+        if (collision.TryGetComponent(out IInteractable it))
         {
-            if(key0 == KeyCode.A)
-            {
-                if (Time.realtimeSinceStartup - lastLeftTime < doublePressTime)
-                {
-                    RushX(false);
-                }
-                lastLeftTime = Time.realtimeSinceStartup;
-            }
-            if(key0 == KeyCode.D)
-            {
-                if (Time.realtimeSinceStartup - lastRightTime < doublePressTime)
-                {
-                    RushX(true);
-                }
-                lastRightTime = Time.realtimeSinceStartup;
-            }
+            interactObject = it;
+            interactObject.EnableInteract();
+            interactLegal = true;
         }
     }
 
-    private IEnumerator rushCoolDown()
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        yield return new WaitForSeconds(rushCD);
-        rushCooling = false;
+        // 离开可交互物体，终止可交互状态
+        if (collision.TryGetComponent(out IInteractable it))
+        {
+            interactObject = it;
+            interactObject.DisableInteract();
+            interactLegal = false;
+        }
     }
-
+    #endregion
 }
