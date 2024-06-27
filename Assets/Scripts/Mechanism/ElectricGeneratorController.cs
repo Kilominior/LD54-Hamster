@@ -172,6 +172,10 @@ public class ElectricGeneratorController : MonoBehaviour, IInteractable
 
     public void ExecuteInteract(MouseController player)
     {
+        if(player.currentState == MouseController.PlayerState.Hamster)
+        {
+            return;
+        }
         hamster = player.gameObject;
         hrb = hamster.GetComponent<Rigidbody2D>();
         ball = player.ball.gameObject;
@@ -277,86 +281,86 @@ public class ElectricGeneratorController : MonoBehaviour, IInteractable
     //}
 
     // 判定球离开前等待的时间
-    private IEnumerator WaitForLock(GameObject ball)
-    {
-        yield return new WaitForSeconds(exitTime);
-        StartCoroutine(nameof(BallControl), ball);
-    }
+    //private IEnumerator WaitForLock(GameObject ball)
+    //{
+    //    yield return new WaitForSeconds(exitTime);
+    //    StartCoroutine(nameof(BallControl), ball);
+    //}
 
-    // 在锁定球后控制其水平位置，同时也判断仓鼠是否试图挣脱
-    private IEnumerator BallControl(GameObject ball)
-    {
-        AudioPlay(0);
-        // 置于电梯上的发电机不锁定仓鼠球Y轴
-        if (transform.parent.GetComponent<LiftController>())
-            ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-        else ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
-        inRotation = ball.transform.rotation;
-        inverseRotation = Quaternion.Inverse(inRotation);
-        //Debug.Log("InRotation: "+inRotation.eulerAngles+"   Inversed: "+inverseRotation.eulerAngles);
-        //rotateSignal.transform.rotation = Quaternion.FromToRotation(rotateSignal.transform.rotation.eulerAngles, ball.transform.rotation.eulerAngles);
-        rotateSignal.gameObject.SetActive(true);
-        roundNow = 0;
-        hasRotated = false;
-        Vector3 distance;
-        while (hasBallIn)
-        {
-            // 离开判定
-            distance = centerPoint.position - ball.transform.position;
-            //Debug.Log(distance.magnitude);
-            if (distance.magnitude >= exitDistance)
-            {
-                Debug.Log(name + ": Ball Let Go!");
-                exiting = true;
-                StopCoroutine(nameof(WaitForExit));
-                StartCoroutine(nameof(WaitForExit));
-                ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
-                hasBallIn = false; break;
-            }
+    //// 在锁定球后控制其水平位置，同时也判断仓鼠是否试图挣脱
+    //private IEnumerator BallControl(GameObject ball)
+    //{
+    //    AudioPlay(0);
+    //    // 置于电梯上的发电机不锁定仓鼠球Y轴
+    //    if (transform.parent.GetComponent<LiftController>())
+    //        ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+    //    else ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezePositionY;
+    //    inRotation = ball.transform.rotation;
+    //    inverseRotation = Quaternion.Inverse(inRotation);
+    //    //Debug.Log("InRotation: "+inRotation.eulerAngles+"   Inversed: "+inverseRotation.eulerAngles);
+    //    //rotateSignal.transform.rotation = Quaternion.FromToRotation(rotateSignal.transform.rotation.eulerAngles, ball.transform.rotation.eulerAngles);
+    //    rotateSignal.gameObject.SetActive(true);
+    //    roundNow = 0;
+    //    hasRotated = false;
+    //    Vector3 distance;
+    //    while (hasBallIn)
+    //    {
+    //        // 离开判定
+    //        distance = centerPoint.position - ball.transform.position;
+    //        //Debug.Log(distance.magnitude);
+    //        if (distance.magnitude >= exitDistance)
+    //        {
+    //            Debug.Log(name + ": Ball Let Go!");
+    //            exiting = true;
+    //            StopCoroutine(nameof(WaitForExit));
+    //            StartCoroutine(nameof(WaitForExit));
+    //            ball.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.None;
+    //            hasBallIn = false; break;
+    //        }
 
-            // 位置维持
-            Vector2 absorbForce = (distance) * 60.0f;
-            ball.GetComponent<Rigidbody2D>().AddForce(absorbForce);
+    //        // 位置维持
+    //        Vector2 absorbForce = (distance) * 60.0f;
+    //        ball.GetComponent<Rigidbody2D>().AddForce(absorbForce);
 
-            //Debug.Log("Rotation of ball: " + ball.transform.rotation + "; --- In Rotation: " + inRotation);
-            // 旋转到反向位置，认为旋转有效
-            if(Mathf.Abs((ball.transform.rotation.eulerAngles - inverseRotation.eulerAngles).z) <= angleBias)
-            {
-                hasRotated = true;
-                //Debug.Log("InverseRotation!");
-            }
-            // 发电判定
-            if (Mathf.Abs((ball.transform.rotation.eulerAngles - inRotation.eulerAngles).z) <= angleBias && hasRotated)
-                //&& Mathf.Abs(ball.GetComponent<Rigidbody2D>().angularVelocity) >= generateVelocity)
-            {
-                roundNow++;
-                Debug.Log(name + ": Round: " + roundNow + " Finished.");
-                if (roundNow < generateRound) AudioPlay(1);
-                else AudioPlay(2);
-                hasRotated = false;
-            }
-            // 成功发电时使得连接的电器开或关
-            if (roundNow >= generateRound)
-            {
-                Debug.Log(name + ": Electricity Generated!");
-                objectActivated = true;
-                //if (objectActivated) objectActivated = false;
-                //else objectActivated = true;
-                UpdateActivatedStatus();
-                roundNow = 0;
-                hasRotated = false;
-            }
-            yield return new WaitForEndOfFrame();
-        }
-    }
+    //        //Debug.Log("Rotation of ball: " + ball.transform.rotation + "; --- In Rotation: " + inRotation);
+    //        // 旋转到反向位置，认为旋转有效
+    //        if(Mathf.Abs((ball.transform.rotation.eulerAngles - inverseRotation.eulerAngles).z) <= angleBias)
+    //        {
+    //            hasRotated = true;
+    //            //Debug.Log("InverseRotation!");
+    //        }
+    //        // 发电判定
+    //        if (Mathf.Abs((ball.transform.rotation.eulerAngles - inRotation.eulerAngles).z) <= angleBias && hasRotated)
+    //            //&& Mathf.Abs(ball.GetComponent<Rigidbody2D>().angularVelocity) >= generateVelocity)
+    //        {
+    //            roundNow++;
+    //            Debug.Log(name + ": Round: " + roundNow + " Finished.");
+    //            if (roundNow < generateRound) AudioPlay(1);
+    //            else AudioPlay(2);
+    //            hasRotated = false;
+    //        }
+    //        // 成功发电时使得连接的电器开或关
+    //        if (roundNow >= generateRound)
+    //        {
+    //            Debug.Log(name + ": Electricity Generated!");
+    //            objectActivated = true;
+    //            //if (objectActivated) objectActivated = false;
+    //            //else objectActivated = true;
+    //            UpdateActivatedStatus();
+    //            roundNow = 0;
+    //            hasRotated = false;
+    //        }
+    //        yield return new WaitForEndOfFrame();
+    //    }
+    //}
 
-    // 球离开后重新判定球进入前的等待时间
-    private IEnumerator WaitForExit()
-    {
-        rotateSignal.SetActive(false);
-        yield return new WaitForSeconds(returnTime);
-        exiting = false;
-    }
+    //// 球离开后重新判定球进入前的等待时间
+    //private IEnumerator WaitForExit()
+    //{
+    //    rotateSignal.SetActive(false);
+    //    yield return new WaitForSeconds(returnTime);
+    //    exiting = false;
+    //}
 
     private void AudioPlay(int i)
     {

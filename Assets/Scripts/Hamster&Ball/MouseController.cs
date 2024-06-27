@@ -16,7 +16,7 @@ public class MouseController : MonoBehaviour
         Hamster
     }
     // 当前所在的状态
-    private PlayerState currentState;
+    public PlayerState currentState;
 
     public BallController ball;
     private static readonly string ballPrefabPath = "Prefab/Ball";
