@@ -70,6 +70,7 @@ public class MouseController : MonoBehaviour
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private SkeletonAnimation skeleton;
+    private DirectionalRush dr;
 
     #region LifeSpan
     void Start()
@@ -78,6 +79,7 @@ public class MouseController : MonoBehaviour
         mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();
         skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
         sr = GetComponent<SpriteRenderer>();
+        dr = transform.Find("RushDir").GetComponent<DirectionalRush>();
 
         ActionBinding();
         StateUpdateTo(PlayerState.Ball);
@@ -127,6 +129,7 @@ public class MouseController : MonoBehaviour
     private void ActionBinding()
     {
         pi = GetComponent<PlayerInput>();
+        pi.onControlsChanged += dr.OnControlsUpdate;
 
         ballAM = pi.actions.actionMaps[0];
         hamsterAM = pi.actions.actionMaps[1];
