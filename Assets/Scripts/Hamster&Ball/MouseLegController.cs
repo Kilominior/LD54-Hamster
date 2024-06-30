@@ -24,8 +24,6 @@ public class MouseLegController : MonoBehaviour
         //Debug.Log("In"+colliderCount);
         colliderCount++;
         onGround = true;
-        // 一旦落地，二段跳自动无效
-        owner.isDoubleJump = false;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {

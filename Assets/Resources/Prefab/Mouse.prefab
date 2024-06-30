@@ -269,7 +269,7 @@ MonoBehaviour:
   ball: {fileID: 0}
   moveSpeed: 10
   JumpSpeed: 150
-  rushSpeed: 200
+  rushSpeed: 500
   isDoubleJump: 0
   doublePressTime: 0.2
 --- !u!114 &5557501904877420831
@@ -295,7 +295,19 @@ MonoBehaviour:
       m_Calls: []
   m_ControlsChangedEvent:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 183265058436286934}
+        m_TargetAssemblyTypeName: DirectionalRush, Assembly-CSharp
+        m_MethodName: OnControlsUpdate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls: []
@@ -544,6 +556,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e6dc1ebb3e1f14d80d2047d2c14f66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dirLength: 2
 --- !u!120 &8621712570332136669
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -584,7 +597,7 @@ LineRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1051768717
   m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
