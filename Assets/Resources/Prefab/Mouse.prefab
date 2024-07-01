@@ -268,10 +268,8 @@ MonoBehaviour:
   currentState: 0
   ball: {fileID: 0}
   moveSpeed: 10
-  JumpSpeed: 150
-  rushSpeed: 500
-  isDoubleJump: 0
-  doublePressTime: 0.2
+  JumpSpeed: 3.5
+  rushSpeed: 9
 --- !u!114 &5557501904877420831
 MonoBehaviour:
   m_ObjectHideFlags: 0

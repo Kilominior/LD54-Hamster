@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6444134551459118207}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3780390183353801418
 SpriteRenderer:
@@ -111,6 +111,37 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.42370188}
   m_EdgeRadius: 0
+--- !u!1 &4337822004326877919
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2917662534776574681}
+  m_Layer: 0
+  m_Name: MountPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2917662534776574681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4337822004326877919}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1339, y: -0.02, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6444134551459118207}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6053076920351113725
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,7 +153,7 @@ GameObject:
   - component: {fileID: 6353855277427477478}
   - component: {fileID: 4564218922129807827}
   m_Layer: 0
-  m_Name: Center
+  m_Name: RotateSignal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -224,7 +255,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 6444134551459118207}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6444134550529247273
 GameObject:
@@ -257,7 +288,7 @@ Transform:
   - {fileID: 6444134551549604076}
   - {fileID: 6444134551412251332}
   m_Father: {fileID: 6444134551459118207}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6444134551412251333
 GameObject:
@@ -324,6 +355,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6353855277427477478}
+  - {fileID: 2917662534776574681}
   - {fileID: 6444134549769739162}
   - {fileID: 8179155893819717597}
   - {fileID: 6444134550529247272}
@@ -410,13 +442,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8607b40a7fa09644f825fa61cdb3d275, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mountPoint: {fileID: 2917662534776574681}
+  mountSpeed: 10
   connectedObject: {fileID: 0}
   objectActivated: 0
   darkSprite: {fileID: 21300000, guid: d66593ac2875bac42b26aec817b35ab2, type: 3}
   lightSprite: {fileID: 21300000, guid: 7b47b4099872d1a4bba3c94af9bbf1e4, type: 3}
   LinePoints: []
   hasBallIn: 0
-  ball: {fileID: 0}
   exitTime: 0.5
   exitDistance: 0.7
   returnTime: 1

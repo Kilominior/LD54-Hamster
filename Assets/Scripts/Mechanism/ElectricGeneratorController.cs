@@ -1,10 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class ElectricGeneratorController : MonoBehaviour, IInteractable
+public class ElectricGeneratorController : BallMountable
 {
     // 与本发电机相连的物体
     public GameObject connectedObject;
@@ -15,8 +14,6 @@ public class ElectricGeneratorController : MonoBehaviour, IInteractable
     // 有电贴图
     public Sprite lightSprite;
 
-    // 电机的中心位置
-    private Transform centerPoint;
     // 旋转目标指示器
     private GameObject rotateSignal;
     // 电线的节点
@@ -28,14 +25,6 @@ public class ElectricGeneratorController : MonoBehaviour, IInteractable
 
     // 仓鼠球已固定
     public bool hasBallIn;
-    // 鼠鼠本体
-    private GameObject hamster;
-    // 鼠鼠的刚体
-    private Rigidbody2D hrb;
-    // 鼠球，若初始其中就有球请挂载
-    public GameObject ball;
-    // 鼠球的刚体
-    private Rigidbody2D brb;
     // 判定仓鼠球离开前的等待时间
     public float exitTime = 0.5f;
     // 判定仓鼠球离开的距离
@@ -72,8 +61,7 @@ public class ElectricGeneratorController : MonoBehaviour, IInteractable
         else hasBallIn = false;
         exiting = false;
 
-        centerPoint = transform.Find("Center");
-        rotateSignal = centerPoint.gameObject;
+        rotateSignal = transform.Find("RotateSignal").gameObject;
         rotateSignal.SetActive(false);
         pointParent = transform.Find("PointParent");
         lineRenderer = GetComponent<LineRenderer>();
@@ -160,43 +148,25 @@ public class ElectricGeneratorController : MonoBehaviour, IInteractable
         }
     }
 
-    public void EnableInteract()
+    public override void EnableInteract()
     {
         //
     }
 
-    public void DisableInteract()
+    public override void DisableInteract()
     {
         //
     }
 
-    public void ExecuteInteract(MouseController player)
+    public override void ExecuteInteract(MouseController player)
     {
-        if(player.currentState == MouseController.PlayerState.Hamster)
-        {
-            return;
-        }
-        hamster = player.gameObject;
-        hrb = hamster.GetComponent<Rigidbody2D>();
-        ball = player.ball.gameObject;
-        brb = ball.GetComponent<Rigidbody2D>();
-        MountBall();
+        base.ExecuteInteract(player);
     }
 
-    private void MountBall()
+    protected override void MountBall()
     {
+        base.MountBall();
         AudioPlay(0);
-        // 将鼠球和鼠鼠固定到中心位置
-        hrb.velocity = Vector2.zero;
-        hamster.transform.position = centerPoint.position;
-
-        brb.velocity = Vector2.zero;
-        brb.bodyType = RigidbodyType2D.Kinematic;
-        ball.transform.position = centerPoint.position;
-
-        brb.bodyType = RigidbodyType2D.Dynamic;
-        brb.constraints = RigidbodyConstraints2D.FreezePosition;
-
         // 启动发电进程
         StartGenerate();
     }

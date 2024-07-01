@@ -2,7 +2,6 @@ using Spine;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 using Spine.Unity;
@@ -34,10 +33,10 @@ public class MouseController : MonoBehaviour
     private float moveSpeed = 10f;
     // 跳跃速度
     [SerializeField]
-    private float JumpSpeed = 150f;
+    private float JumpSpeed = 3.5f;
     // 冲撞速度
     [SerializeField]
-    private float rushSpeed = 500f;
+    private float rushSpeed = 9.0f;
     // 冲撞是否正在冷却
     private bool isRushCooling;
     // 冲撞的冷却时间
@@ -247,7 +246,7 @@ public class MouseController : MonoBehaviour
         // 保证在地面上起跳
         if (!mouseLeg.onGround) { return; }
         JumpForce = new(0, JumpSpeed);
-        rb.AddForce(JumpForce, ForceMode2D.Force);
+        rb.AddForce(JumpForce, ForceMode2D.Impulse);
         AniPlayY("jump_left", "jump_right");
     }
 
@@ -270,7 +269,7 @@ public class MouseController : MonoBehaviour
     {
         if(isRushCooling) { return; }
         rushForce = dir * rushSpeed;
-        rb.AddForce(rushForce, ForceMode2D.Force);
+        rb.AddForce(rushForce, ForceMode2D.Impulse);
         AniPlayX(rushForce.x, "strike_left", "strike_right");
         StartCoroutine(nameof(rushCoolDown));
     }
@@ -391,9 +390,13 @@ public class MouseController : MonoBehaviour
         // 接触可交互物体，判断是否允许进行交互
         if (collision.TryGetComponent(out IInteractable it))
         {
-            interactObject = it;
-            interactObject.EnableInteract();
-            interactLegal = true;
+            if((it is BallMountable && currentState == PlayerState.Ball)
+            || (it is HamsterEnterable && currentState == PlayerState.Hamster))
+            {
+                interactObject = it;
+                interactObject.EnableInteract();
+                interactLegal = true;
+            }
         }
     }
 
