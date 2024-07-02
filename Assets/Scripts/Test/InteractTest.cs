@@ -21,6 +21,12 @@ public class InteractTest : MonoBehaviour, IInteractable
         sr.color = Color.red;
     }
 
+    public virtual bool TryEnableInteract(MouseController player)
+    {
+        EnableInteract();
+        return true;
+    }
+
     public void EnableInteract()
     {
         sr.color = Color.green;
@@ -31,14 +37,18 @@ public class InteractTest : MonoBehaviour, IInteractable
         sr.color = Color.red;
     }
 
-    public void ExecuteInteract(MouseController player)
+    public bool ExecuteInteract(MouseController player)
+    {
+        player.StateSwitch();
+        return true;
+    }
+
+    private void TimeChange(MouseController player)
     {
         hamster = player.gameObject;
         hrb = hamster.GetComponent<Rigidbody2D>();
         ball = player.ball.gameObject;
         brb = ball.GetComponent<Rigidbody2D>();
-
-        //player.StateSwitch();
         if (Time.timeScale == 1.0f)
         {
             Time.timeScale = 0.5f;

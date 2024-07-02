@@ -443,7 +443,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mountPoint: {fileID: 2917662534776574681}
-  mountSpeed: 10
+  mountSpeed: 0.2
   connectedObject: {fileID: 0}
   objectActivated: 0
   darkSprite: {fileID: 21300000, guid: d66593ac2875bac42b26aec817b35ab2, type: 3}

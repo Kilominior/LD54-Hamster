@@ -7,14 +7,15 @@ using static UnityEngine.InputSystem.InputAction;
 using Spine.Unity;
 using QFramework;
 
+// 鼠/球状态
+public enum PlayerState
+{
+    Ball,
+    Hamster
+}
+
 public class MouseController : MonoBehaviour
 {
-    // 鼠/球状态
-    public enum PlayerState
-    {
-        Ball,
-        Hamster
-    }
     // 当前所在的状态
     public PlayerState currentState;
 
@@ -218,8 +219,8 @@ public class MouseController : MonoBehaviour
     private void ExecuteInteract()
     {
         if (interactObject == null || !interactLegal) return;
-        interactObject.ExecuteInteract(this);
-        interactLegal = false;
+        // 根据交互对象的情况决定是否允许再次交互
+        interactLegal = interactObject.ExecuteInteract(this);
     }
     #endregion
 
@@ -254,14 +255,20 @@ public class MouseController : MonoBehaviour
     private void OnTimeSlowDown(TimeScaleSlowDownEvent @event)
     {
         rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-        brb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        if(brb != null)
+        {
+            brb.interpolation = RigidbodyInterpolation2D.Interpolate;
+        }
     }
 
     // 时间恢复时停止插值
     private void OnTimeRecover(TimeScaleRecoverEvent @event)
     {
         rb.interpolation = RigidbodyInterpolation2D.None;
-        brb.interpolation = RigidbodyInterpolation2D.None;
+        if (brb != null)
+        {
+            brb.interpolation = RigidbodyInterpolation2D.None;
+        }
     }
 
     // 冲撞
@@ -387,16 +394,11 @@ public class MouseController : MonoBehaviour
     #region Collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // 接触可交互物体，判断是否允许进行交互
+        // 接触可交互物体，尝试启动交互
         if (collision.TryGetComponent(out IInteractable it))
         {
-            if((it is BallMountable && currentState == PlayerState.Ball)
-            || (it is HamsterEnterable && currentState == PlayerState.Hamster))
-            {
-                interactObject = it;
-                interactObject.EnableInteract();
-                interactLegal = true;
-            }
+            interactObject = it;
+            interactLegal = it.TryEnableInteract(this);
         }
     }
 
