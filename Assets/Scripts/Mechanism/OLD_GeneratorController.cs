@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class GeneratorController : MonoBehaviour
+public class OLD_GeneratorController : MonoBehaviour
 {
     public GameObject connectedObject;     // 与本发电机相连的物体
     public bool objectActivated;           // 物体开关状态

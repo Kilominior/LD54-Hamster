@@ -62,7 +62,10 @@ public class BallMountable : MonoBehaviour, IInteractable
 
     // 鼠球的此次交互是否是试图挂载到本物体上
     // 若否，则为试图卸载
-    protected bool isToMount;
+    protected bool isBallMounting;
+
+    // 当前是否正有鼠球被挂载在本物体上
+    protected bool hasBallMounted;
 
     // 挂载点
     [SerializeField]
@@ -87,7 +90,7 @@ public class BallMountable : MonoBehaviour, IInteractable
 
     public virtual void EnableInteract()
     {
-        isToMount = true;
+        isBallMounting = true;
     }
 
     public virtual void DisableInteract()
@@ -97,7 +100,7 @@ public class BallMountable : MonoBehaviour, IInteractable
 
     public virtual bool ExecuteInteract(MouseController player)
     {
-        if (isToMount)
+        if (isBallMounting)
         {
             // 获取鼠、球本身及其刚体
             hamster = player;
@@ -106,7 +109,7 @@ public class BallMountable : MonoBehaviour, IInteractable
             brb = ball.GetComponent<Rigidbody2D>();
 
             // 下一次操作应为卸载
-            isToMount = false;
+            isBallMounting = false;
 
             // 进行挂载
             MountBall();
@@ -114,7 +117,7 @@ public class BallMountable : MonoBehaviour, IInteractable
         else
         {
             // 下一次操作应为挂载
-            isToMount = true;
+            isBallMounting = true;
 
             // 进行卸载
             DismountBall();
@@ -144,6 +147,9 @@ public class BallMountable : MonoBehaviour, IInteractable
 
         // 停止对球壳运动的限制
         brb.constraints = RigidbodyConstraints2D.None;
+
+        // 确认鼠球已卸载完毕
+        hasBallMounted = false;
     }
 
     // 对球壳施加朝向挂载点的移动，直到其位置准确
@@ -162,6 +168,9 @@ public class BallMountable : MonoBehaviour, IInteractable
         ball.transform.position = mountPoint.position;
         brb.bodyType = RigidbodyType2D.Dynamic;
         brb.constraints = RigidbodyConstraints2D.FreezePosition;
+
+        // 确认球壳已挂载完毕
+        hasBallMounted = true;
     }
 }
 
