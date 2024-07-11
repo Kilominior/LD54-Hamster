@@ -9,7 +9,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "39d5edb7-2bcc-41bc-b318-25197ce45d6e",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -24,7 +24,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Look",
+                    "name": "Aim",
                     "type": "Value",
                     "id": "99afed8f-da3d-42a4-b351-feec45d8e0b2",
                     "expectedControlType": "Vector2",
@@ -40,20 +40,18 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "AimTrigger",
+                    "type": "Button",
+                    "id": "763438da-ab45-4ad1-93e6-77003c750c42",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
-                {
-                    "name": "",
-                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
-                    "path": "<Gamepad>/leftStick",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Move",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
                 {
                     "name": "WASD",
                     "id": "00ca640b-d935-4593-8157-c05846ea39b3",
@@ -71,7 +69,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -82,7 +80,7 @@
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -93,7 +91,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -104,7 +102,7 @@
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -115,7 +113,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -126,7 +124,7 @@
                     "path": "<Keyboard>/leftArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -137,7 +135,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -148,10 +146,21 @@
                     "path": "<Keyboard>/rightArrow",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
+                    "groups": "Keyboard&Mouse",
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                },
+                {
+                    "name": "",
+                    "id": "978bfe49-cc26-4a3d-ab7b-7d7a29327403",
+                    "path": "<Gamepad>/leftStick",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -182,7 +191,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Look",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -193,29 +202,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Touch",
-                    "action": "Look",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "3e5f5442-8668-4b27-a940-df99bad7e831",
-                    "path": "<Joystick>/{Hatswitch}",
+                    "path": "<HID::GreenAsia Inc.    USB Joystick     >/hat",
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
-                    "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Interact",
+                    "action": "Aim",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -237,6 +235,17 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Touch",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -276,12 +285,45 @@
                 },
                 {
                     "name": "",
+                    "id": "501e846a-7fc4-4bc7-898d-569bccf9a7fe",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "dee83481-3959-42dd-8f5f-0657d56bb733",
                     "path": "<HID::GreenAsia Inc.    USB Joystick     >/button8",
                     "interactions": "",
                     "processors": "",
                     "groups": "Joystick",
                     "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f3e23558-4200-4c7d-a1a3-b9cb938f0c56",
+                    "path": "<Pointer>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse;Touch",
+                    "action": "AimTrigger",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dda94fdd-6a7a-4a28-b396-c28a5d6f9d00",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AimTrigger",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
@@ -295,7 +337,7 @@
                     "name": "Move",
                     "type": "Value",
                     "id": "2faa4d82-7775-4706-bbd4-05d2a5cecc97",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Analog",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -303,7 +345,7 @@
                 {
                     "name": "Jump",
                     "type": "Button",
-                    "id": "84cd465b-5292-4324-bd2c-c52fd0b968d0",
+                    "id": "9e7b4e4a-8361-4cf2-abaf-524bbbc7a3e1",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -312,7 +354,7 @@
                 {
                     "name": "Interact",
                     "type": "Button",
-                    "id": "c8aac3a4-8935-4fa8-af35-e01f67ccb375",
+                    "id": "53640e4f-ec64-473e-9212-237f2ad1bf45",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -454,18 +496,7 @@
                 },
                 {
                     "name": "",
-                    "id": "a8479c25-080b-44c3-973a-866ea41bc1c5",
-                    "path": "<Gamepad>/rightTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "bafc3e04-91ad-48e4-9319-915c1bae1e25",
+                    "id": "95b5af79-94ac-40dd-9385-a9fde1914a1f",
                     "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
@@ -476,7 +507,7 @@
                 },
                 {
                     "name": "",
-                    "id": "16a4016f-4102-4a54-aca3-d40991d098fa",
+                    "id": "fdd02f97-1d4a-47e4-a140-2b2effc7b76b",
                     "path": "<Touchscreen>/primaryTouch/tap",
                     "interactions": "",
                     "processors": "",
@@ -487,7 +518,18 @@
                 },
                 {
                     "name": "",
-                    "id": "f9326414-cb0e-4d0d-90e3-4695ee6a96e6",
+                    "id": "e5ccfe4f-0f1e-48c3-841f-d96c638d6bfb",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e9afcbc4-75be-4986-9c34-f1e3be258f94",
                     "path": "<HID::GreenAsia Inc.    USB Joystick     >/button3",
                     "interactions": "",
                     "processors": "",
@@ -498,7 +540,7 @@
                 },
                 {
                     "name": "",
-                    "id": "d9389aeb-5b9d-4f4b-aacd-82f88f5664b8",
+                    "id": "e37dafc5-2b5b-4ab3-8d6a-b400382a86bc",
                     "path": "<XRController>/{PrimaryAction}",
                     "interactions": "",
                     "processors": "",
@@ -509,7 +551,7 @@
                 },
                 {
                     "name": "",
-                    "id": "aff54176-9561-4afc-99b1-8b05fd036eff",
+                    "id": "a535f3dc-53da-449d-a783-94786d441988",
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
@@ -520,7 +562,18 @@
                 },
                 {
                     "name": "",
-                    "id": "a9a5303b-b2c5-472d-a434-9ada875b0e3e",
+                    "id": "7e222ac6-cbf1-464b-90fd-4421db215ee1",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Jump",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0e5f8e56-585f-4393-bbcd-57c780bb2d6b",
                     "path": "<HID::GreenAsia Inc.    USB Joystick     >/button8",
                     "interactions": "",
                     "processors": "",

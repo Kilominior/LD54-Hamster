@@ -28,6 +28,8 @@ public class MouseController : MonoBehaviour
 
     // 鼠腿碰撞体，用于判定是否允许跳跃
     private MouseLegController mouseLeg;
+    // 冲撞控制器，用于处理冲撞能力
+    private DirectionalRush rushComp;
 
     // 行动速度
     [SerializeField]
@@ -78,6 +80,7 @@ public class MouseController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();
+        rushComp = transform.Find("RushDir").GetComponent<DirectionalRush>();
         skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
         sr = GetComponent<SpriteRenderer>();
         dr = transform.Find("RushDir").GetComponent<DirectionalRush>();
@@ -125,6 +128,11 @@ public class MouseController : MonoBehaviour
             }
         }
     }
+
+    private void OnDestroy()
+    {
+        ActionUnbinding();
+    }
     #endregion
 
     #region Input
@@ -139,12 +147,29 @@ public class MouseController : MonoBehaviour
         ballAM["Move"].canceled += OnMoveCanceled;
         ballAM["Jump"].performed += OnJumpPerformed;
         ballAM["Interact"].performed += OnInteractPerformed;
+        ballAM["AimTrigger"].performed += rushComp.OnAimTriggerPerformed;
+        ballAM["AimTrigger"].canceled += rushComp.OnAimTriggerCanceled;
+        ballAM["Aim"].performed += rushComp.OnAimPerformed;
 
         hamsterAM["Move"].performed += OnMovePerformed;
         hamsterAM["Move"].canceled += OnMoveCanceled;
         hamsterAM["Jump"].performed += OnJumpPerformed;
         hamsterAM["Interact"].performed += OnInteractPerformed;
     }
+
+    private void ActionUnbinding()
+    {
+        ballAM["Move"].performed -= OnMovePerformed;
+        ballAM["Move"].canceled -= OnMoveCanceled;
+        ballAM["Jump"].performed -= OnJumpPerformed;
+        ballAM["Interact"].performed -= OnInteractPerformed;
+
+        hamsterAM["Move"].performed -= OnMovePerformed;
+        hamsterAM["Move"].canceled -= OnMoveCanceled;
+        hamsterAM["Jump"].performed -= OnJumpPerformed;
+        hamsterAM["Interact"].performed -= OnInteractPerformed;
+    }
+
 
     private void OnMovePerformed(CallbackContext context)
     {
@@ -280,77 +305,6 @@ public class MouseController : MonoBehaviour
         AniPlayX(rushForce.x, "strike_left", "strike_right");
         StartCoroutine(nameof(rushCoolDown));
     }
-
-    //// 上下冲撞
-    //private void RushY()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-    //    {
-    //        if (mouseLeg.onGround)
-    //        {
-    //            Debug.Log("Rush to Up");
-    //            isDoubleJump = true;
-    //            JumpForce = new(0, JumpSpeed);
-    //            rb.AddForce(JumpForce, ForceMode2D.Force);
-    //            AniPlayY("jump_left", "jump_right");
-    //            return;
-    //        }
-    //        if (isDoubleJump)
-    //        {
-    //            Debug.Log("Double Rush to Up");
-    //            isDoubleJump = false;
-    //            JumpForce = new(0, JumpSpeed);
-    //            rb.AddForce(JumpForce, ForceMode2D.Force);
-    //            AniPlayY("jump_left", "jump_right");
-    //            return;
-    //        }
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-    //    {
-    //        if (mouseLeg.onGround) return;
-    //        Debug.Log("Rush to Bottom");
-    //        JumpForce = new(0, -JumpSpeed);
-    //        rb.AddForce(JumpForce, ForceMode2D.Force);
-    //        AniPlayY("strike_down_left", "strike_down_right");
-    //    }
-    //}
-
-    //// 左右冲刺
-    //private void RushX(bool toRight)
-    //{
-    //    if (isRushCooling) return;
-    //    Debug.Log("Rush to " + (toRight ? "Right" : "Left"));
-    //    if (toRight) rushForce = new(rushSpeed, 0);
-    //    else rushForce = new(-rushSpeed, 0);
-    //    rb.AddForce(rushForce, ForceMode2D.Force);
-    //    AniPlayX(rushForce.x, "strike_left", "strike_right");
-    //    isRushCooling = true;
-    //    StartCoroutine(nameof(rushCoolDown));
-    //}
-
-    //// 双击左右键触发冲撞
-    //private void DoublePress(KeyCode key0, KeyCode key1)
-    //{
-    //    if (Input.GetKeyDown(key0) || Input.GetKeyDown(key1))
-    //    {
-    //        if (key0 == KeyCode.A)
-    //        {
-    //            if (Time.realtimeSinceStartup - lastLeftTime < doublePressTime)
-    //            {
-    //                RushX(false);
-    //            }
-    //            lastLeftTime = Time.realtimeSinceStartup;
-    //        }
-    //        if (key0 == KeyCode.D)
-    //        {
-    //            if (Time.realtimeSinceStartup - lastRightTime < doublePressTime)
-    //            {
-    //                RushX(true);
-    //            }
-    //            lastRightTime = Time.realtimeSinceStartup;
-    //        }
-    //    }
-    //}
 
     private IEnumerator rushCoolDown()
     {

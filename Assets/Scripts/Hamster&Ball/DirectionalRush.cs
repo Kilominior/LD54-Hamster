@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using QFramework;
+using static UnityEngine.InputSystem.InputAction;
 
 public class DirectionalRush : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class DirectionalRush : MonoBehaviour
     // 方向向量
     private Vector3 dirVector;
 
+    // 每帧方向的变化量
+    private Vector3 deltaDirVector;
+
+    // 方向线条的最大长度
     [SerializeField]
     private float dirLength = 3.0f;
 
@@ -51,74 +56,80 @@ public class DirectionalRush : MonoBehaviour
 
     private void Initialize()
     {
-        isAiming = false;
-        RecoverTimeScale();
+        EndAiming(true);
     }
 
     void Update()
     {
-        CheckAim();
         AimUpdate();
-    }
-
-    // 检查是否存在瞄准的操作
-    private void CheckAim()
-    {
-        // TODO: 目前仅支持鼠标，未来应引入更多输入方式
-        // 可放弃现有方案，改用action，Performed和Canceled足以用于设置isAiming，
-        // 且这样做不会和具体的某个输入方式强耦合
-        if (curMouse != null)
-        {
-            if (curMouse.leftButton.wasPressedThisFrame)
-            {
-                StartAiming();
-            }
-            if (curMouse.leftButton.wasReleasedThisFrame)
-            {
-                EndAiming();
-            }
-        }
     }
 
     // 开始瞄准
     private void StartAiming()
     {
         isAiming = true;
-        GetMousePosition(out mousePosInit);
+        dirRenderer.enabled = true;
+        //GetMousePosition(out mousePosInit);
+        dirVector = Vector2.zero;
         ExecuteTimeSlowDown();
     }
 
     // 结束瞄准
-    private void EndAiming()
+    private void EndAiming(bool canceled = false)
     {
         isAiming = false;
         RecoverTimeScale();
+        dirRenderer.enabled = false;
 
+        if (canceled) return;
         // 进行冲撞
         player.Rush(dirVector / dirLength);
     }
 
-    // 根据瞄准情况更新冲撞方向以及LineRenderer
+    //// 根据瞄准情况更新冲撞方向以及LineRenderer
+    //private void AimUpdate()
+    //{
+    //    if (isAiming)
+    //    {
+    //        dirRenderer.enabled = true;
+    //        dirBeginPos = player.transform.position;
+    //        GetMousePosition(out mousePosCur);
+    //        dirVector = mousePosInit - mousePosCur;
+    //        if(dirVector.magnitude > dirLength)
+    //        {
+    //            dirVector = dirVector.normalized * dirLength;
+    //        }
+    //        dirEndPos = dirBeginPos + dirVector;
+
+    //        dirRenderer.SetPosition(0, dirBeginPos);
+    //        dirRenderer.SetPosition(1, dirEndPos);
+    //    }
+    //    else
+    //    {
+    //        dirRenderer.enabled = false;
+    //    }
+    //}
+
     private void AimUpdate()
     {
-        if (isAiming)
-        {
-            dirRenderer.enabled = true;
-            dirBeginPos = player.transform.position;
-            GetMousePosition(out mousePosCur);
-            dirVector = mousePosInit - mousePosCur;
-            if(dirVector.magnitude > dirLength)
-            {
-                dirVector = dirVector.normalized * dirLength;
-            }
-            dirEndPos = dirBeginPos + dirVector;
+        if (!isAiming) return;
+        // 更新当前瞄准线的起点和终点
+        dirBeginPos = player.transform.position;
+        dirEndPos = dirBeginPos + dirVector;
 
-            dirRenderer.SetPosition(0, dirBeginPos);
-            dirRenderer.SetPosition(1, dirEndPos);
-        }
-        else
+        dirRenderer.SetPosition(0, dirBeginPos);
+        dirRenderer.SetPosition(1, dirEndPos);
+    }
+
+    public void OnAimPerformed(CallbackContext context)
+    {
+        if (!isAiming) return;
+        // 计算并更新当前的方向向量
+        deltaDirVector = context.ReadValue<Vector2>();
+        dirVector += deltaDirVector / 10.0f;
+        if (dirVector.magnitude > dirLength)
         {
-            dirRenderer.enabled = false;
+            dirVector = dirVector.normalized * dirLength;
         }
     }
 
@@ -142,6 +153,16 @@ public class DirectionalRush : MonoBehaviour
     {
         Time.timeScale = DefaultTimeScale;
         TypeEventSystem.Global.Send<TimeScaleRecoverEvent>();
+    }
+
+    public void OnAimTriggerPerformed(CallbackContext context)
+    {
+        StartAiming();
+    }
+
+    public void OnAimTriggerCanceled(CallbackContext context)
+    {
+        EndAiming();
     }
 
     // 在当前控制器变化时调用，更新现在的操作设备
