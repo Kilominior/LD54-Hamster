@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BlackPanelManager : MonoBehaviour
+public class BlackPanelManager : MonoBehaviour, IBaseMechanism
 {
     public GameObject blackPanel;
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LiftController : MonoBehaviour
+public class LiftController : MonoBehaviour, IBaseMechanism
 {
     public GameObject[] points;
     public float moveSpeed;

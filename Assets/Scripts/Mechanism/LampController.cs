@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LampController : MonoBehaviour
+public class LampController : MonoBehaviour, IBaseMechanism
 {
     public Sprite darkSprite;
     public Sprite lightSprite;

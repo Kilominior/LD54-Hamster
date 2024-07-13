@@ -23,6 +23,7 @@ public class BallController : MonoBehaviour
         sr.sprite = ballSprites[0];
         HP = MAXHP;
         audioSource = GetComponent<AudioSource>();
+        panelManager = GameObject.Find("Panel Manager").GetComponent<PanelManager>();
     }
 
     public void GetDamage(float amount)

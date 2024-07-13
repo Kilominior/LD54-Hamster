@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GeneratorController : BallMountable
 {
+    // Mechanism Camera
+    public GameObject targetGroupCamera;
+    public GameObject targetGroupCameraPrefab;
+
     // 与本发电机相连的物体
     public GameObject connectedObject;
 
@@ -100,12 +104,33 @@ public class GeneratorController : BallMountable
     protected override void MountBall()
     {
         base.MountBall();
+
+        if (targetGroupCamera != null)
+        {
+            CameraManager.instance.SwitchVCameraTo(targetGroupCamera);
+        }
+        else
+        {
+            // 实例化机制相机
+            targetGroupCamera = Instantiate(targetGroupCameraPrefab, transform.position, Quaternion.identity);
+            TargetGroupCamera targetGroupCameraScript = targetGroupCamera.GetComponent<TargetGroupCamera>();
+            targetGroupCameraScript.AddTarget(gameObject);
+            targetGroupCameraScript.AddTarget(connectedObject);
+            CameraManager.instance.SwitchVCameraTo(targetGroupCamera);
+        }
+
         StartGenerate();
     }
 
     protected override void DismountBall()
     {
         EndGenerate();
+
+        if (targetGroupCamera != null)
+        {
+            CameraManager.instance.SwitchVCameraBack();
+        }
+
         base.DismountBall();
     }
 
