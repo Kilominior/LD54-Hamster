@@ -1,5 +1,67 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &781887986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 781887987}
+  m_Layer: 0
+  m_Name: GameObject (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &781887987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 781887986}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 7.34, y: 4.81, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6444134550529247272}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1349941755
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1349941756}
+  m_Layer: 0
+  m_Name: GameObject (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1349941756
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349941755}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.5, y: 4.8100004, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6444134550529247272}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4337822004326877919
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,6 +238,8 @@ Transform:
   m_Children:
   - {fileID: 6444134551549604076}
   - {fileID: 6444134551412251332}
+  - {fileID: 1349941756}
+  - {fileID: 781887987}
   m_Father: {fileID: 6444134551459118207}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -203,7 +267,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6444134551412251333}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.073, y: -2.32, z: 0}
+  m_LocalPosition: {x: -2.5, y: -2.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -332,22 +396,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mountPoint: {fileID: 2917662534776574681}
   mountSpeed: 0.2
+  targetGroupCamera: {fileID: 0}
+  targetGroupCameraPrefab: {fileID: 6438148734223869154, guid: 2dd39d471131fc24fae59ffdc799e1d3, type: 3}
   connectedObject: {fileID: 0}
-  objectActivated: 0
-  darkSprite: {fileID: 21300000, guid: d66593ac2875bac42b26aec817b35ab2, type: 3}
-  lightSprite: {fileID: 21300000, guid: 7b47b4099872d1a4bba3c94af9bbf1e4, type: 3}
-  LinePoints: []
-  exitTime: 0.5
-  exitDistance: 0.7
-  returnTime: 1
-  exiting: 0
-  generateVelocity: 10
-  generateRound: 3
-  angleBias: 6
   clips:
   - {fileID: 8300000, guid: 7f4c54da874d4984a8d5d69cea2f4aba, type: 3}
   - {fileID: 8300000, guid: 9e722b120c69bf94dab006f908060230, type: 3}
   - {fileID: 8300000, guid: ce8e86a6f3c88544bb5a85a3627b0e9b, type: 3}
+  objectActivated: 0
+  darkSprite: {fileID: 21300000, guid: d66593ac2875bac42b26aec817b35ab2, type: 3}
+  lightSprite: {fileID: 21300000, guid: 7b47b4099872d1a4bba3c94af9bbf1e4, type: 3}
+  generateRound: 3
+  angleBias: 6
 --- !u!120 &6444134551459118205
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -567,7 +627,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6444134551549604077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.45, y: -2.32, z: 0}
+  m_LocalPosition: {x: -1.84, y: -2.85, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
