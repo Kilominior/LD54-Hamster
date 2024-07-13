@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using QFramework;
 using static UnityEngine.InputSystem.InputAction;
+using TMPro;
 
 public class DirectionalRush : MonoBehaviour
 {
@@ -27,7 +28,19 @@ public class DirectionalRush : MonoBehaviour
     private Joystick curJoystick;
 
     // 方向向量
-    private Vector3 dirVector;
+    private Vector3 _dirVector;
+    private Vector3 dirVector
+    {
+        get { return _dirVector; }
+        set
+        {
+            _dirVector = value;
+            if (_dirVector.magnitude > dirLength)
+            {
+                _dirVector = _dirVector.normalized * dirLength;
+            }
+        }
+    }
 
     // 每帧方向的变化量
     private Vector3 deltaDirVector;
@@ -71,6 +84,7 @@ public class DirectionalRush : MonoBehaviour
         dirRenderer.enabled = true;
         //GetMousePosition(out mousePosInit);
         dirVector = Vector2.zero;
+        deltaDirVector = Vector2.zero;
         ExecuteTimeSlowDown();
     }
 
@@ -126,11 +140,7 @@ public class DirectionalRush : MonoBehaviour
         if (!isAiming) return;
         // 计算并更新当前的方向向量
         deltaDirVector = context.ReadValue<Vector2>();
-        dirVector += deltaDirVector / 10.0f;
-        if (dirVector.magnitude > dirLength)
-        {
-            dirVector = dirVector.normalized * dirLength;
-        }
+        dirVector += deltaDirVector / 5.0f;
     }
 
     // 获取鼠标当前位置

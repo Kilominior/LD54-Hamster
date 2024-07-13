@@ -375,14 +375,16 @@ MonoBehaviour:
       /stick]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: c8aac3a4-8935-4fa8-af35-e01f67ccb375
-    m_ActionName: Hamster/Interact[/Keyboard/e,/Shaul Eizikovich vJoy - Virtual Joystick/trigger,/GreenAsia
-      Inc.    USB Joystick     /trigger]
+    m_ActionId: 763438da-ab45-4ad1-93e6-77003c750c42
+    m_ActionName: Player/AimTrigger[/Mouse/press,/Pen/press,/XInputControllerWindows/rightTrigger]
   - m_PersistentCalls:
       m_Calls: []
-    m_ActionId: 84cd465b-5292-4324-bd2c-c52fd0b968d0
-    m_ActionName: Hamster/Jump[/Keyboard/space,/GreenAsia Inc.    USB Joystick    
-      /button8]
+    m_ActionId: 9e7b4e4a-8361-4cf2-abaf-524bbbc7a3e1
+    m_ActionName: Hamster/Jump[/Keyboard/space,/XInputControllerWindows/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 53640e4f-ec64-473e-9212-237f2ad1bf45
+    m_ActionName: Hamster/Interact[/Keyboard/e,/XInputControllerWindows/buttonWest]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -484,7 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d247ba06193faa74d9335f5481b2b56c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skeletonDataAsset: {fileID: 11400000, guid: c46c1fa200e47f7489974bce469df23b, type: 2}
+  skeletonDataAsset: {fileID: 11400000, guid: 280af1e249dd3c24f9a919fbb32dacad, type: 2}
   initialSkinName: 
   initialFlipX: 0
   initialFlipY: 0

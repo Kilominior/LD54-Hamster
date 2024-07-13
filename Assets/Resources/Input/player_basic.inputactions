@@ -208,17 +208,6 @@
                 },
                 {
                     "name": "",
-                    "id": "3e5f5442-8668-4b27-a940-df99bad7e831",
-                    "path": "<HID::GreenAsia Inc.    USB Joystick     >/hat",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
-                    "action": "Aim",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "05f6913d-c316-48b2-a6bb-e225f14c7960",
                     "path": "<Keyboard>/e",
                     "interactions": "",
@@ -242,21 +231,10 @@
                 {
                     "name": "",
                     "id": "143bb1cd-cc10-4eca-a2f0-a3664166fe91",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ee3d0cd2-254e-47a7-a8cb-bc94d9658c54",
-                    "path": "<HID::GreenAsia Inc.    USB Joystick     >/button3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -286,21 +264,10 @@
                 {
                     "name": "",
                     "id": "501e846a-7fc4-4bc7-898d-569bccf9a7fe",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dee83481-3959-42dd-8f5f-0657d56bb733",
-                    "path": "<HID::GreenAsia Inc.    USB Joystick     >/button8",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -519,21 +486,10 @@
                 {
                     "name": "",
                     "id": "e5ccfe4f-0f1e-48c3-841f-d96c638d6bfb",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonWest",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e9afcbc4-75be-4986-9c34-f1e3be258f94",
-                    "path": "<HID::GreenAsia Inc.    USB Joystick     >/button3",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -563,21 +519,10 @@
                 {
                     "name": "",
                     "id": "7e222ac6-cbf1-464b-90fd-4421db215ee1",
-                    "path": "<Gamepad>/rightTrigger",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Jump",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0e5f8e56-585f-4393-bbcd-57c780bb2d6b",
-                    "path": "<HID::GreenAsia Inc.    USB Joystick     >/button8",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Joystick",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false

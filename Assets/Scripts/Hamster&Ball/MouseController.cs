@@ -284,6 +284,8 @@ public class MouseController : MonoBehaviour
         {
             brb.interpolation = RigidbodyInterpolation2D.Interpolate;
         }
+
+        AniPlayY("xuli_left", "xuli_right");
     }
 
     // 时间恢复时停止插值
