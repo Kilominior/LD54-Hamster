@@ -105,6 +105,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CM vcam1
       objectReference: {fileID: 0}
+    - target: {fileID: 4243031770161981238, guid: 3f838c237ba71574fb42575c09329c97, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f838c237ba71574fb42575c09329c97, type: 3}
 --- !u!4 &1499153500 stripped

@@ -8,6 +8,9 @@ public class CannonController : BallMountable, IBaseMechanism
     public float shootDelay = 2f; // 发射延迟时间
     public Transform shootDirectionTransform; // 发射方向
     public float shootForce = 10f; // 发射力度
+
+    public SpriteRenderer tubeSpriteRenderer;
+    public SpriteRenderer baseSpriteRenderer;
     // public GameObject hamster; // 仓鼠
     // public GameObject ball; // 球
     // public GameObject father;
@@ -33,6 +36,11 @@ public class CannonController : BallMountable, IBaseMechanism
         if (!canShoot) return;
 
         base.MountBall();
+
+        tubeSpriteRenderer.sortingLayerName = "Middle";
+        tubeSpriteRenderer.sortingOrder = 1;
+        baseSpriteRenderer.sortingLayerName = "Middle";
+        baseSpriteRenderer.sortingOrder = 1;
         // hamster.transform.position = transform.position;
         // ball.transform.position = transform.position;
 
@@ -91,6 +99,10 @@ public class CannonController : BallMountable, IBaseMechanism
         // 清空存储的球的引用
         // ball = null;
         yield return new WaitForSeconds(shootDelay);
+        tubeSpriteRenderer.sortingLayerName = "Bottom";
+        tubeSpriteRenderer.sortingOrder = 10;
+        baseSpriteRenderer.sortingLayerName = "Bottom";
+        baseSpriteRenderer.sortingOrder = 10;
         canShoot = true;
     }
 
