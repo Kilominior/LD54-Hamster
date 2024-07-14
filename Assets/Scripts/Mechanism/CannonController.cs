@@ -40,7 +40,7 @@ public class CannonController : BallMountable, IBaseMechanism
         tubeSpriteRenderer.sortingLayerName = "Middle";
         tubeSpriteRenderer.sortingOrder = 1;
         baseSpriteRenderer.sortingLayerName = "Middle";
-        baseSpriteRenderer.sortingOrder = 1;
+        baseSpriteRenderer.sortingOrder = 2;
         // hamster.transform.position = transform.position;
         // ball.transform.position = transform.position;
 
@@ -102,7 +102,7 @@ public class CannonController : BallMountable, IBaseMechanism
         tubeSpriteRenderer.sortingLayerName = "Bottom";
         tubeSpriteRenderer.sortingOrder = 10;
         baseSpriteRenderer.sortingLayerName = "Bottom";
-        baseSpriteRenderer.sortingOrder = 10;
+        baseSpriteRenderer.sortingOrder = 11;
         canShoot = true;
     }
 
