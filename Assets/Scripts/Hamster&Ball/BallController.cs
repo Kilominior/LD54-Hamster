@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using QFramework;
 
 public class BallController : MonoBehaviour
 {
@@ -10,9 +11,6 @@ public class BallController : MonoBehaviour
     public float MAXHP = 100f;      // 最大生命值
     public float HP;                // 当前生命值
     public Sprite[] ballSprites;
-
-    public PanelManager panelManager;
-    // public CameraShake virtualCamera;
     private SpriteRenderer sr;
 
     private AudioSource audioSource;
@@ -23,7 +21,6 @@ public class BallController : MonoBehaviour
         sr.sprite = ballSprites[0];
         HP = MAXHP;
         audioSource = GetComponent<AudioSource>();
-        panelManager = GameObject.Find("Panel Manager").GetComponent<PanelManager>();
     }
 
     public void GetDamage(float amount)
@@ -64,6 +61,6 @@ public class BallController : MonoBehaviour
         this.gameObject.GetComponent<Collider2D>().enabled = false;
         this.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         yield return new WaitForSeconds(1f);
-        panelManager.EnableVictoryPanel();
+        TypeEventSystem.Global.Send<GameWinEvent>();
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using QFramework;
 
 public class PanelManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PanelManager : MonoBehaviour
         victoryPanel.SetActive(false);
         if (Time.timeScale == 0f)
             Time.timeScale = 1f;
+
+        EventRegister();
     }
 
     private void Update()
@@ -42,6 +45,16 @@ public class PanelManager : MonoBehaviour
             pausePanel.SetActive(false);
             EnablePlayerControl();
         }
+    }
+
+    private void EventRegister()
+    {
+        TypeEventSystem.Global.Register<GameWinEvent>(OnGameWin).UnRegisterWhenGameObjectDestroyed(this);
+    }
+
+    private void OnGameWin(GameWinEvent @event)
+    {
+        EnableVictoryPanel();
     }
 
     public void EnableVictoryPanel()
