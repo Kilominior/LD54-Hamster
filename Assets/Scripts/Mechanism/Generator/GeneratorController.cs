@@ -128,7 +128,7 @@ public class GeneratorController : BallMountable
 
         if (targetGroupCamera != null)
         {
-            CameraManager.instance.SwitchVCameraBack();
+            CameraManager.instance?.SwitchVCameraBack();
         }
 
         base.DismountBall();
