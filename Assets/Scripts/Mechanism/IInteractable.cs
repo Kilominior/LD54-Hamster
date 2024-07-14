@@ -161,6 +161,7 @@ public class BallMountable : MonoBehaviour, IInteractable
         {
             pullVector = (mountPoint.position - ball.transform.position) * mountSpeed;
             ball.transform.position += pullVector;
+            hamster.transform.position += pullVector;
             yield return mountBallIE;
         }
 

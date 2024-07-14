@@ -38,13 +38,6 @@ public class MouseController : MonoBehaviour
     // 冲撞速度
     [SerializeField]
     private float rushSpeed = 9.0f;
-    // 冲撞是否正在冷却
-    public bool isRushCooling;
-    // 冲撞的冷却时间
-    [SerializeField]
-    private float rushCD = 0.5f;
-    // 冲撞冷却倒计时
-    private WaitForSeconds WaitForRushCD;
 
     // 移动的力
     private Vector2 moveForce;
@@ -84,7 +77,6 @@ public class MouseController : MonoBehaviour
         skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
         sr = GetComponent<SpriteRenderer>();
         dr = transform.Find("RushDir").GetComponent<DirectionalRush>();
-        WaitForRushCD = new WaitForSeconds(rushCD);
 
         ActionBinding();
         StateUpdateTo(PlayerState.Ball);
@@ -95,7 +87,6 @@ public class MouseController : MonoBehaviour
     private void Initialize()
     {
         interactLegal = false;
-        isRushCooling = false;
         EventRegister();
     }
 
@@ -164,6 +155,9 @@ public class MouseController : MonoBehaviour
         ballAM["Move"].canceled -= OnMoveCanceled;
         ballAM["Jump"].performed -= OnJumpPerformed;
         ballAM["Interact"].performed -= OnInteractPerformed;
+        ballAM["AimTrigger"].performed -= dr.OnAimTriggerPerformed;
+        ballAM["AimTrigger"].canceled -= dr.OnAimTriggerCanceled;
+        ballAM["Aim"].performed -= dr.OnAimPerformed;
 
         hamsterAM["Move"].performed -= OnMovePerformed;
         hamsterAM["Move"].canceled -= OnMoveCanceled;
@@ -305,14 +299,6 @@ public class MouseController : MonoBehaviour
         rushForce = dir * rushSpeed;
         rb.AddForce(rushForce, ForceMode2D.Impulse);
         AniPlayX(rushForce.x, "strike_left", "strike_right");
-        isRushCooling = true;
-        StartCoroutine(nameof(rushCoolDown));
-    }
-
-    private IEnumerator rushCoolDown()
-    {
-        yield return WaitForRushCD;
-        isRushCooling = false;
     }
     #endregion
 

@@ -270,7 +270,6 @@ MonoBehaviour:
   moveSpeed: 10
   JumpSpeed: 3.5
   rushSpeed: 9
-  rushCD: 0.5
 --- !u!114 &5557501904877420831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -557,6 +556,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84e6dc1ebb3e1f14d80d2047d2c14f66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isRushCooling: 0
+  rushCD: 0.5
   dirLength: 2
 --- !u!120 &8621712570332136669
 LineRenderer:
@@ -578,7 +579,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d39bd9f907cb1bf4387619197698859f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -609,8 +610,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.39130402
+        time: 0.24611664
+        value: 1
         inSlope: 0
         outSlope: 0
         tangentMode: 0
