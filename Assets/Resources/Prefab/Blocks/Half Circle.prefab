@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7857546666341795820}
   - component: {fileID: 7857546666341795822}
   - component: {fileID: 5110362848943970135}
+  - component: {fileID: -793934240648907406}
   m_Layer: 0
   m_Name: Half Circle
   m_TagString: Untagged
@@ -143,3 +144,15 @@ PolygonCollider2D:
       - {x: -0.86276317, y: -0.43089628}
       - {x: 0.8665, y: -0.4295}
       - {x: 0.81064194, y: -0.13518357}
+--- !u!114 &-793934240648907406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857546666341795816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929aeade5fad5394cb47e9bfc8ff29a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

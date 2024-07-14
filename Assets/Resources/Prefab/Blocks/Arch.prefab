@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2739760178140985291}
   - component: {fileID: 2739760178140985292}
   - component: {fileID: 8938821944061808298}
+  - component: {fileID: 7102282626048479139}
   m_Layer: 0
   m_Name: Arch
   m_TagString: Untagged
@@ -144,3 +145,15 @@ PolygonCollider2D:
       - {x: -0.6260452, y: -0.24856114}
       - {x: -0.6794527, y: -0.50307465}
       - {x: -0.96653897, y: -0.501426}
+--- !u!114 &7102282626048479139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2739760178140985295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929aeade5fad5394cb47e9bfc8ff29a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

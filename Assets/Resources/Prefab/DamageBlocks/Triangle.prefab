@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5561855933498044172}
   - component: {fileID: 8944321380347373370}
   - component: {fileID: -571628779829466170}
+  - component: {fileID: 9024647094346966860}
   m_Layer: 0
   m_Name: Triangle
   m_TagString: Untagged
@@ -149,3 +150,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageThreshold: 10
+--- !u!114 &9024647094346966860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5561855933498044170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929aeade5fad5394cb47e9bfc8ff29a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

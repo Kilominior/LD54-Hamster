@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 3448040868694444242}
   - component: {fileID: 7814161576640668723}
   - component: {fileID: 8221961016686225713}
+  - component: {fileID: 1427320435949616294}
   m_Layer: 0
   m_Name: Ball
   m_TagString: Ball
@@ -129,7 +130,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e94a8ad344cfa1b44ab9cf28e5b4d0fa, type: 3}
   - {fileID: 21300000, guid: f4117bd53ac0e334fb42cd1b67354039, type: 3}
   - {fileID: 21300000, guid: 1c097cee61f8d4a458b5a156921e354f, type: 3}
-  panelManager: {fileID: 0}
 --- !u!60 &7814161576640668723
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -311,3 +311,15 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1427320435949616294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3448040868694444247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 929aeade5fad5394cb47e9bfc8ff29a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

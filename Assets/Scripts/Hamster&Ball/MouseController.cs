@@ -93,7 +93,6 @@ public class MouseController : MonoBehaviour
     private void EventRegister()
     {
         TypeEventSystem.Global.Register<TimeScaleSlowDownEvent>(OnTimeSlowDown).UnRegisterWhenGameObjectDestroyed(this);
-        TypeEventSystem.Global.Register<TimeScaleRecoverEvent>(OnTimeRecover).UnRegisterWhenGameObjectDestroyed(this);
     }
 
     private void FixedUpdate()
@@ -271,26 +270,10 @@ public class MouseController : MonoBehaviour
         AniPlayY("jump_left", "jump_right");
     }
 
-    // 时间减缓时进行插值
+    // 做出冲刺预备动作
     private void OnTimeSlowDown(TimeScaleSlowDownEvent @event)
     {
-        rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-        if(brb != null)
-        {
-            brb.interpolation = RigidbodyInterpolation2D.Interpolate;
-        }
-
         AniPlayY("xuli_left", "xuli_right");
-    }
-
-    // 时间恢复时停止插值
-    private void OnTimeRecover(TimeScaleRecoverEvent @event)
-    {
-        rb.interpolation = RigidbodyInterpolation2D.None;
-        if (brb != null)
-        {
-            brb.interpolation = RigidbodyInterpolation2D.None;
-        }
     }
 
     // 冲撞
