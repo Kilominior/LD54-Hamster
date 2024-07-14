@@ -28,8 +28,6 @@ public class MouseController : MonoBehaviour
 
     // 鼠腿碰撞体，用于判定是否允许跳跃
     private MouseLegController mouseLeg;
-    // 冲撞控制器，用于处理冲撞能力
-    private DirectionalRush rushComp;
 
     // 行动速度
     [SerializeField]
@@ -41,9 +39,12 @@ public class MouseController : MonoBehaviour
     [SerializeField]
     private float rushSpeed = 9.0f;
     // 冲撞是否正在冷却
-    private bool isRushCooling;
+    public bool isRushCooling;
     // 冲撞的冷却时间
-    private float rushCD = 1.0f;
+    [SerializeField]
+    private float rushCD = 0.5f;
+    // 冲撞冷却倒计时
+    private WaitForSeconds WaitForRushCD;
 
     // 移动的力
     private Vector2 moveForce;
@@ -80,10 +81,10 @@ public class MouseController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();
-        rushComp = transform.Find("RushDir").GetComponent<DirectionalRush>();
         skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
         sr = GetComponent<SpriteRenderer>();
         dr = transform.Find("RushDir").GetComponent<DirectionalRush>();
+        WaitForRushCD = new WaitForSeconds(rushCD);
 
         ActionBinding();
         StateUpdateTo(PlayerState.Ball);
@@ -100,8 +101,8 @@ public class MouseController : MonoBehaviour
 
     private void EventRegister()
     {
-        TypeEventSystem.Global.Register<TimeScaleSlowDownEvent>(OnTimeSlowDown);
-        TypeEventSystem.Global.Register<TimeScaleRecoverEvent>(OnTimeRecover);
+        TypeEventSystem.Global.Register<TimeScaleSlowDownEvent>(OnTimeSlowDown).UnRegisterWhenGameObjectDestroyed(this);
+        TypeEventSystem.Global.Register<TimeScaleRecoverEvent>(OnTimeRecover).UnRegisterWhenGameObjectDestroyed(this);
     }
 
     private void FixedUpdate()
@@ -147,9 +148,9 @@ public class MouseController : MonoBehaviour
         ballAM["Move"].canceled += OnMoveCanceled;
         ballAM["Jump"].performed += OnJumpPerformed;
         ballAM["Interact"].performed += OnInteractPerformed;
-        ballAM["AimTrigger"].performed += rushComp.OnAimTriggerPerformed;
-        ballAM["AimTrigger"].canceled += rushComp.OnAimTriggerCanceled;
-        ballAM["Aim"].performed += rushComp.OnAimPerformed;
+        ballAM["AimTrigger"].performed += dr.OnAimTriggerPerformed;
+        ballAM["AimTrigger"].canceled += dr.OnAimTriggerCanceled;
+        ballAM["Aim"].performed += dr.OnAimPerformed;
 
         hamsterAM["Move"].performed += OnMovePerformed;
         hamsterAM["Move"].canceled += OnMoveCanceled;
@@ -301,16 +302,16 @@ public class MouseController : MonoBehaviour
     // 冲撞
     public void Rush(Vector2 dir)
     {
-        if(isRushCooling) { return; }
         rushForce = dir * rushSpeed;
         rb.AddForce(rushForce, ForceMode2D.Impulse);
         AniPlayX(rushForce.x, "strike_left", "strike_right");
+        isRushCooling = true;
         StartCoroutine(nameof(rushCoolDown));
     }
 
     private IEnumerator rushCoolDown()
     {
-        yield return new WaitForSeconds(rushCD);
+        yield return WaitForRushCD;
         isRushCooling = false;
     }
     #endregion

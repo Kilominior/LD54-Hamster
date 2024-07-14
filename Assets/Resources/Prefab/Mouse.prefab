@@ -270,6 +270,7 @@ MonoBehaviour:
   moveSpeed: 10
   JumpSpeed: 3.5
   rushSpeed: 9
+  rushCD: 0.5
 --- !u!114 &5557501904877420831
 MonoBehaviour:
   m_ObjectHideFlags: 0

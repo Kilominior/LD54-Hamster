@@ -96,7 +96,9 @@ public class DirectionalRush : MonoBehaviour
         dirRenderer.enabled = false;
 
         if (canceled) return;
-        // 进行冲撞
+
+        // 如果冷却已经结束则进行冲撞
+        if (player.isRushCooling) { return; }
         player.Rush(dirVector / dirLength);
     }
 
