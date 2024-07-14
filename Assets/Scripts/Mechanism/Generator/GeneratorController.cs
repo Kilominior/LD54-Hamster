@@ -107,7 +107,7 @@ public class GeneratorController : BallMountable
 
         if (targetGroupCamera != null)
         {
-            CameraManager.instance.SwitchVCameraTo(targetGroupCamera);
+            CameraManager.instance?.SwitchVCameraTo(targetGroupCamera);
         }
         else
         {
@@ -116,7 +116,7 @@ public class GeneratorController : BallMountable
             TargetGroupCamera targetGroupCameraScript = targetGroupCamera.GetComponent<TargetGroupCamera>();
             targetGroupCameraScript.AddTarget(gameObject);
             targetGroupCameraScript.AddTarget(connectedObject);
-            CameraManager.instance.SwitchVCameraTo(targetGroupCamera);
+            CameraManager.instance?.SwitchVCameraTo(targetGroupCamera);
         }
 
         StartGenerate();
