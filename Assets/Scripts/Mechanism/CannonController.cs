@@ -38,9 +38,9 @@ public class CannonController : BallMountable, IBaseMechanism
         base.MountBall();
 
         tubeSpriteRenderer.sortingLayerName = "Middle";
-        tubeSpriteRenderer.sortingOrder = 1;
+        tubeSpriteRenderer.sortingOrder = 2;
         baseSpriteRenderer.sortingLayerName = "Middle";
-        baseSpriteRenderer.sortingOrder = 2;
+        baseSpriteRenderer.sortingOrder = 3;
         // hamster.transform.position = transform.position;
         // ball.transform.position = transform.position;
 
