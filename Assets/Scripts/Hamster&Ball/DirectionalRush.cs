@@ -17,6 +17,15 @@ public class DirectionalRush : MonoBehaviour
     // 玩家
     private MouseController player;
 
+
+    // 冲撞是否正在冷却
+    public bool isRushCooling;
+    // 冲撞的冷却时间
+    [SerializeField]
+    private float rushCD = 0.5f;
+    // 冲撞冷却倒计时
+    private WaitForSeconds WaitForRushCD;
+
     // 当前的鼠标（如果有）
     private Mouse curMouse;
 
@@ -64,12 +73,15 @@ public class DirectionalRush : MonoBehaviour
         player = transform.parent.GetComponent<MouseController>();
         dirRenderer = GetComponent<LineRenderer>();
         mainCamera = Camera.main;
+        WaitForRushCD = new WaitForSeconds(rushCD);
+
         Initialize();
     }
 
     private void Initialize()
     {
         EndAiming(true);
+        isRushCooling = false;
     }
 
     void Update()
@@ -80,6 +92,7 @@ public class DirectionalRush : MonoBehaviour
     // 开始瞄准
     private void StartAiming()
     {
+        if (isRushCooling) { return; }
         isAiming = true;
         dirRenderer.enabled = true;
         //GetMousePosition(out mousePosInit);
@@ -96,10 +109,24 @@ public class DirectionalRush : MonoBehaviour
         dirRenderer.enabled = false;
 
         if (canceled) return;
+        ExecuteRush();
+    }
 
-        // 如果冷却已经结束则进行冲撞
-        if (player.isRushCooling) { return; }
+    private void ExecuteRush()
+    {
+        // 若长度过短判定为不冲撞
+        if (dirVector.magnitude <= 0.01f) return;
+        // 进行冲撞并启动冷却
+        isRushCooling = true;
         player.Rush(dirVector / dirLength);
+        dirVector = Vector3.zero;
+        StartCoroutine(nameof(rushCoolDown));
+    }
+
+    private IEnumerator rushCoolDown()
+    {
+        yield return WaitForRushCD;
+        isRushCooling = false;
     }
 
     //// 根据瞄准情况更新冲撞方向以及LineRenderer
