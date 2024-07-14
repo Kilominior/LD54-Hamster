@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditorInternal;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
@@ -20,6 +19,11 @@ public class CameraManager : MonoBehaviour
 
     public void SwitchVCameraTo(GameObject newCamera)
     {
+        if (mainCamera == null)
+        {
+            return;
+        }
+
         mainCamera.SetActive(false);
         newCamera.SetActive(true);
         currentCamera = newCamera;
@@ -27,6 +31,11 @@ public class CameraManager : MonoBehaviour
 
     public void SwitchVCameraBack()
     {
+        if (mainCamera == null)
+        {
+            return;
+        }
+
         mainCamera.SetActive(true);
         currentCamera.SetActive(false);
         currentCamera = mainCamera;
