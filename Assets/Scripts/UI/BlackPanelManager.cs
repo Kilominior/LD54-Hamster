@@ -8,6 +8,7 @@ public class BlackPanelManager : MonoBehaviour, IBaseMechanism
     public GameObject blackPanel;
 
     private Image image;
+    private CanvasGroup canvasGroup;
 
     private void Awake()
     {
@@ -18,6 +19,7 @@ public class BlackPanelManager : MonoBehaviour, IBaseMechanism
     private void Start()
     {
         image = blackPanel.GetComponent<Image>();
+        canvasGroup = blackPanel.GetComponent<CanvasGroup>();
         // DecreaseBlack();
     }
 
@@ -37,6 +39,7 @@ public class BlackPanelManager : MonoBehaviour, IBaseMechanism
         {
             // 使用Lerp在一定时间内逐渐改变透明值
             image.color = Color.Lerp(initialColor, new Color(initialColor.r, initialColor.g, initialColor.b, 0f), elapsedTime / duration);
+            canvasGroup.alpha = image.color.a;
 
             elapsedTime += Time.deltaTime;
             yield return null;

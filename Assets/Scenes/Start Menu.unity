@@ -12788,6 +12788,7 @@ GameObject:
   - component: {fileID: 992900220}
   - component: {fileID: 992900222}
   - component: {fileID: 992900221}
+  - component: {fileID: 992900223}
   m_Layer: 5
   m_Name: Black Panel
   m_TagString: Untagged
@@ -12854,6 +12855,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 992900219}
   m_CullTransparentMesh: 1
+--- !u!225 &992900223
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 992900219}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &1125067017
 GameObject:
   m_ObjectHideFlags: 0
