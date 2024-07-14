@@ -20,14 +20,14 @@ public class PanelManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && !pausePanel.activeSelf && Time.timeScale == 1f)
+        if (Input.GetKeyDown(KeyCode.Escape) && !pausePanel.activeSelf)
         {
             pausePanel.SetActive(true);
             DisablePlayerControl();
         }
 
         // 检测鼠标左键点击
-        if (Input.GetMouseButtonDown(0) && victoryPanel.activeSelf && Time.timeScale == 0f)
+        if (Input.GetMouseButtonDown(0) && victoryPanel.activeSelf)
         {
             PlayerScoreManager.SetScore(victoryPanel.GetComponent<VictoryPanelManager>().score, levelNum);
             Time.timeScale = 1f;
