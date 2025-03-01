@@ -51,16 +51,17 @@ public class MouseController : MonoBehaviour
     // 输入系统
     private static readonly string ballAMName = "Player";
     private static readonly string hamsterAMName = "Hamster";
+    private static readonly string UIAMName = "UI";
     private PlayerInput pi;
     private InputActionMap ballAM;
     private InputActionMap hamsterAM;
+    private InputActionMap UIAM;
 
     // 因有Move输入而正在移动中
     private bool isMoving;
 
     // 当前可执行交互操作的对象
     private IInteractable interactObject;
-    private bool interactLegal;
 
     // 自身和球壳的刚体
     private Rigidbody2D rb;
@@ -86,7 +87,6 @@ public class MouseController : MonoBehaviour
 
     private void Initialize()
     {
-        interactLegal = false;
         EventRegister();
     }
 
@@ -133,37 +133,57 @@ public class MouseController : MonoBehaviour
 
         ballAM = pi.actions.actionMaps[0];
         hamsterAM = pi.actions.actionMaps[1];
+        UIAM = pi.actions.actionMaps[2];
+
+        pi.onControlsChanged += OnControlsUpdate;
+        ControlManager.Instance.InitControlScheme(pi);
 
         ballAM["Move"].performed += OnMovePerformed;
         ballAM["Move"].canceled += OnMoveCanceled;
         ballAM["Jump"].performed += OnJumpPerformed;
         ballAM["Interact"].performed += OnInteractPerformed;
+        ballAM["SubInteract"].performed += OnSubInteractPerformed;
         ballAM["AimTrigger"].performed += dr.OnAimTriggerPerformed;
         ballAM["AimTrigger"].canceled += dr.OnAimTriggerCanceled;
         ballAM["Aim"].performed += dr.OnAimPerformed;
+        ballAM["Pause"].performed += OnPausePerformed;
 
         hamsterAM["Move"].performed += OnMovePerformed;
         hamsterAM["Move"].canceled += OnMoveCanceled;
         hamsterAM["Jump"].performed += OnJumpPerformed;
         hamsterAM["Interact"].performed += OnInteractPerformed;
+        hamsterAM["Pause"].performed += OnPausePerformed;
+
+        UIAM["Pause"].performed += OnPausePerformed;
     }
 
     private void ActionUnbinding()
     {
+        pi.onControlsChanged -= OnControlsUpdate;
+
         ballAM["Move"].performed -= OnMovePerformed;
         ballAM["Move"].canceled -= OnMoveCanceled;
         ballAM["Jump"].performed -= OnJumpPerformed;
         ballAM["Interact"].performed -= OnInteractPerformed;
+        ballAM["SubInteract"].performed -= OnSubInteractPerformed;
         ballAM["AimTrigger"].performed -= dr.OnAimTriggerPerformed;
         ballAM["AimTrigger"].canceled -= dr.OnAimTriggerCanceled;
         ballAM["Aim"].performed -= dr.OnAimPerformed;
+        ballAM["Pause"].performed -= OnPausePerformed;
 
         hamsterAM["Move"].performed -= OnMovePerformed;
         hamsterAM["Move"].canceled -= OnMoveCanceled;
         hamsterAM["Jump"].performed -= OnJumpPerformed;
         hamsterAM["Interact"].performed -= OnInteractPerformed;
+        hamsterAM["Pause"].performed -= OnPausePerformed;
+
+        UIAM["Pause"].performed -= OnPausePerformed;
     }
 
+    private void OnControlsUpdate(PlayerInput pi)
+    {
+        ControlManager.Instance.OnControlsUpdate(pi);
+    }
 
     private void OnMovePerformed(CallbackContext context)
     {
@@ -188,6 +208,17 @@ public class MouseController : MonoBehaviour
     {
         ExecuteInteract();
         //Debug.Log("Interact performed!");
+    }
+
+    private void OnSubInteractPerformed(CallbackContext context)
+    {
+        ExecuteSubInteract();
+        //Debug.Log("Sub Interact performed!");
+    }
+
+    private void OnPausePerformed(CallbackContext context)
+    {
+        TypeEventSystem.Global.Send<GamePauseTriggeredEvent>();
     }
     #endregion
 
@@ -217,29 +248,69 @@ public class MouseController : MonoBehaviour
     {
         currentState = targetState;
 
-        if (targetState == PlayerState.Ball)
+        switch(targetState)
         {
-            if (ballPrefab == null)
-            {
-                ballPrefab = Resources.Load<GameObject>(ballPrefabPath);
-            }
-            ball = Instantiate(ballPrefab, transform.position,
-                Quaternion.identity).GetComponent<BallController>();
-            brb = ball.GetComponent<Rigidbody2D>();
-            pi.SwitchCurrentActionMap(ballAMName);
-        }
-        else
-        {
-            if (ball != null) Destroy(ball.gameObject);
-            pi.SwitchCurrentActionMap(hamsterAMName);
+            case PlayerState.Ball:
+                // 生成新的球，更新ActionMap为鼠球
+                if (ballPrefab == null)
+                {
+                    ballPrefab = Resources.Load<GameObject>(ballPrefabPath);
+                }
+                ball = Instantiate(ballPrefab, transform.position,
+                    Quaternion.identity).GetComponent<BallController>();
+                brb = ball.GetComponent<Rigidbody2D>();
+                pi.SwitchCurrentActionMap(ballAMName);
+                break;
+            case PlayerState.Hamster:
+                // 销毁现有的球，更新ActionMap为鼠鼠
+                if (ball != null) Destroy(ball.gameObject);
+                pi.SwitchCurrentActionMap(hamsterAMName);
+                break;
+            default:
+                break;
         }
     }
 
     private void ExecuteInteract()
     {
-        if (interactObject == null || !interactLegal) return;
-        // 根据交互对象的情况决定是否允许再次交互
-        interactLegal = interactObject.ExecuteInteract(this);
+        if (interactObject == null) return;
+        interactObject.ExecuteInteract(this);
+    }
+
+    private void ExecuteSubInteract()
+    {
+        if (interactObject == null) return;
+        if (interactObject is ISubInteractable)
+        {
+            // 根据交互对象的情况决定是否允许再次交互
+            (interactObject as ISubInteractable).ExecuteSubInteract(this);
+        }
+    }
+
+    /// <summary>
+    /// 打开UI时，更新ActionMap为UI
+    /// </summary>
+    public void SetActionMapToUI()
+    {
+        pi.SwitchCurrentActionMap(UIAMName);
+    }
+
+    /// <summary>
+    /// 关闭UI后，恢复原有的控制
+    /// </summary>
+    public void RecoverActionMap()
+    {
+        switch (currentState)
+        {
+            case PlayerState.Ball:
+                pi.SwitchCurrentActionMap(ballAMName);
+                break;
+            case PlayerState.Hamster:
+                pi.SwitchCurrentActionMap(hamsterAMName);
+                break;
+            default:
+                break;
+        }
     }
     #endregion
 
@@ -324,7 +395,7 @@ public class MouseController : MonoBehaviour
         if (collision.TryGetComponent(out IInteractable it))
         {
             interactObject = it;
-            interactLegal = it.TryEnableInteract(this);
+            it.EnableInteract(this);
         }
     }
 
@@ -333,9 +404,8 @@ public class MouseController : MonoBehaviour
         // 离开可交互物体，终止可交互状态
         if (collision.TryGetComponent(out IInteractable it))
         {
-            interactObject = it;
-            interactObject.DisableInteract();
-            interactLegal = false;
+            it.DisableInteract();
+            interactObject = null;
         }
     }
     #endregion

@@ -10,28 +10,36 @@ public class VehicleController : MonoBehaviour, IBaseMechanism
         Left
     }
 
+    public enum VehicleState
+    {
+        Idle,   // 静止状态
+        Moving, // 移动状态
+        Stopped // 遭遇障碍物无法继续前进
+    }
+
     public float moveForce = 10f; // 控制车辆移动的力大小
     public MoveDirection moveDirection;
     private Rigidbody2D rb;
-    private bool isStarted;
+    private VehicleState state;
 
     private void Start()
     {
-        isStarted = false;
         rb = GetComponent<Rigidbody2D>();
+        state = VehicleState.Idle;
         rb.bodyType = RigidbodyType2D.Kinematic;
     }
 
     private void FixedUpdate()
     {
-        if (isStarted)
+        if (state == VehicleState.Moving)
+        {
             Move();
+        }
     }
 
     public void StartMove()
     {
-        Debug.Log("汽车开始移动");
-        isStarted = true;
+        state = VehicleState.Moving;
         rb.bodyType = RigidbodyType2D.Dynamic;
     }
 
@@ -41,5 +49,13 @@ public class VehicleController : MonoBehaviour, IBaseMechanism
             rb.AddForce(Vector2.left * moveForce, ForceMode2D.Force);
         else
             rb.AddForce(Vector2.right * moveForce, ForceMode2D.Force);
+    }
+
+
+    public void StopMoving()
+    {
+        state = VehicleState.Stopped;
+        rb.velocity = Vector2.zero;
+        // rb.bodyType = RigidbodyType2D.Kinematic;
     }
 }

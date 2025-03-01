@@ -1,32 +1,54 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using QFramework;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class BlackPanelManager : MonoBehaviour, IBaseMechanism
 {
     public GameObject blackPanel;
+    public GameObject defaultSelectObj;
+    public MouseController player;
 
     private Image image;
     private CanvasGroup canvasGroup;
 
     private void Awake()
     {
-        if (PlayerScoreManager.isEnteredStartMenu)
-            blackPanel.SetActive(false);
-    }
-
-    private void Start()
-    {
         image = blackPanel.GetComponent<Image>();
         canvasGroup = blackPanel.GetComponent<CanvasGroup>();
-        // DecreaseBlack();
+
+        // 曾经进入过开始菜单，则直接关闭Panel
+        if (PlayerScoreManager.isEnteredStartMenu)
+        {
+            DecreaseBlack();
+        }
+
+        EventRegister();
     }
 
-    // 逐渐降低透明度
+    // 逐渐降低透明度，最终关闭Panel
     public void DecreaseBlack()
     {
         StartCoroutine(FadeOut());
+    }
+
+    // 设置Panel至关闭状态，须在player初始化完毕后执行
+    private void HidePanel()
+    {
+        // 确保最终透明值为0
+        canvasGroup.alpha = 0;
+        image.color = new Color(0, 0, 0, 0);
+
+        // 将面板设置为不活跃
+        PlayerScoreManager.isEnteredStartMenu = true;
+        blackPanel.SetActive(false);
+
+        // 启用UI导航控制
+        EventSystem.current.SetSelectedGameObject(defaultSelectObj);
+        player.SetActionMapToUI();
     }
 
     private IEnumerator FadeOut()
@@ -45,11 +67,17 @@ public class BlackPanelManager : MonoBehaviour, IBaseMechanism
             yield return null;
         }
 
-        // 确保最终透明值为0
-        image.color = new Color(initialColor.r, initialColor.g, initialColor.b, 0f);
+        HidePanel();
+    }
 
-        // 将面板设置为不活跃
-        PlayerScoreManager.isEnteredStartMenu = true;
-        blackPanel.SetActive(false);
+
+    private void EventRegister()
+    {
+        TypeEventSystem.Global.Register<GamePauseTriggeredEvent>(OnGamePause).UnRegisterWhenGameObjectDestroyed(this);
+    }
+
+    private void OnGamePause(GamePauseTriggeredEvent @event)
+    {
+        HidePanel();
     }
 }

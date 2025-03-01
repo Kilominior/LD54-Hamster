@@ -21,13 +21,7 @@ public class InteractTest : MonoBehaviour, IInteractable
         sr.color = Color.red;
     }
 
-    public virtual bool TryEnableInteract(MouseController player)
-    {
-        EnableInteract();
-        return true;
-    }
-
-    public void EnableInteract()
+    public void EnableInteract(MouseController player)
     {
         sr.color = Color.green;
     }
@@ -37,10 +31,9 @@ public class InteractTest : MonoBehaviour, IInteractable
         sr.color = Color.red;
     }
 
-    public bool ExecuteInteract(MouseController player)
+    public void ExecuteInteract(MouseController player)
     {
         player.StateSwitch();
-        return true;
     }
 
     private void TimeChange(MouseController player)

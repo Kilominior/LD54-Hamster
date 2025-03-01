@@ -6,3 +6,9 @@ public class GameWinEvent
 {
 
 }
+
+// 按下了暂停键
+public class GamePauseTriggeredEvent
+{
+
+}

@@ -8,16 +8,16 @@ public static class PlayerScoreManager
 
     public static void SetScore(int score, int levelNum)
     {
-        if (levelNum > 0 && levelNum <= 5 && score > scores[levelNum - 1])
-            scores[levelNum - 1] = score;
+        if (levelNum >= 0 && levelNum < 5 && score > scores[levelNum])
+            scores[levelNum] = score;
         else
             return;
     }
 
     public static int GetScore(int levelNum)
     {
-        if (levelNum > 0 && levelNum <= 5)
-            return scores[levelNum - 1];
+        if (levelNum >= 0 && levelNum < 5)
+            return scores[levelNum];
         else
             return 0;
     }

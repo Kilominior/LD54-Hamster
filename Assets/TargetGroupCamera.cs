@@ -8,8 +8,8 @@ public class TargetGroupCamera : MonoBehaviour
 
     public CinemachineTargetGroup targetGroup;
 
-    public void AddTarget(GameObject target)
+    public void AddTarget(Transform target)
     {
-        targetGroup.AddMember(target.transform, 1, 2);
+        targetGroup.AddMember(target, 1, 2);
     }
 }

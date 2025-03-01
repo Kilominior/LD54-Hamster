@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class DamageDetecter : MonoBehaviour
 {
-    // 伤害阈值
+    [Tooltip("伤害阈值，当撞击速度超过这一阈值时会计算伤害")]
     public float damageThreshold;
+    [Tooltip("伤害倍率，最终的伤害会由速度值乘以此倍率产生")]
+    [SerializeField]
+    private float damageMultiplier = 1.0f;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -17,7 +20,7 @@ public class DamageDetecter : MonoBehaviour
             if (collisionSpeed > damageThreshold)
             {
                 // 计算伤害值
-                int damageAmount = Mathf.RoundToInt(collisionSpeed);
+                int damageAmount = Mathf.RoundToInt(collisionSpeed * damageMultiplier);
 
                 // 执行伤害操作
                 InflictDamage(damageAmount, collision.transform.GetComponent<BallController>());

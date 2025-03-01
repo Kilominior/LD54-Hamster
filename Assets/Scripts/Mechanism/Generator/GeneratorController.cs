@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class GeneratorController : BallMountable
 {
-    // Mechanism Camera
-    public GameObject targetGroupCamera;
-    public GameObject targetGroupCameraPrefab;
-
     // 与本发电机相连的物体
     public GameObject connectedObject;
 
@@ -39,7 +35,7 @@ public class GeneratorController : BallMountable
     {
         UpdateLine();
 
-        if (hasBallMounted)
+        if (HasObjectMounted())
         {
             Generate();
         }
@@ -47,7 +43,7 @@ public class GeneratorController : BallMountable
 
     protected virtual void Initialize()
     {
-        hasBallMounted = false;
+        mountAccessState = MountAccessState.MountDenied;
     }
 
     // 初始化连线
@@ -104,20 +100,7 @@ public class GeneratorController : BallMountable
     protected override void MountBall()
     {
         base.MountBall();
-
-        if (targetGroupCamera != null)
-        {
-            CameraManager.instance?.SwitchVCameraTo(targetGroupCamera);
-        }
-        else
-        {
-            // 实例化机制相机
-            targetGroupCamera = Instantiate(targetGroupCameraPrefab, transform.position, Quaternion.identity);
-            TargetGroupCamera targetGroupCameraScript = targetGroupCamera.GetComponent<TargetGroupCamera>();
-            targetGroupCameraScript.AddTarget(gameObject);
-            targetGroupCameraScript.AddTarget(connectedObject);
-            CameraManager.instance?.SwitchVCameraTo(targetGroupCamera);
-        }
+        SwitchCameraToTargetGroup();
 
         StartGenerate();
     }
@@ -125,28 +108,26 @@ public class GeneratorController : BallMountable
     protected override void DismountBall()
     {
         EndGenerate();
-
-        if (targetGroupCamera != null)
-        {
-            CameraManager.instance?.SwitchVCameraBack();
-        }
+        CameraManager.instance?.SwitchVCameraBack();
 
         base.DismountBall();
     }
 
-    public override void EnableInteract()
+    protected virtual void SwitchCameraToTargetGroup()
     {
-        base.EnableInteract();
-    }
-
-    public override void DisableInteract()
-    {
-        base.DisableInteract();
-    }
-
-    public override bool ExecuteInteract(MouseController player)
-    {
-        return base.ExecuteInteract(player);
+        if (CameraManager.instance != null)
+        {
+            if (CameraManager.instance.IsTargetGroupRegistered(this))
+            {
+                CameraManager.instance.SwitchVCameraTo(this);
+            }
+            else
+            {
+                // 实例化机制相机
+                CameraManager.instance.RegisterTargetGroup(this, transform, connectedObject.transform);
+                CameraManager.instance.SwitchVCameraTo(this);
+            }
+        }
     }
 
     protected void AudioPlay(int i)

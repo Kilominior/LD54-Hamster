@@ -284,7 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 0f802fccbf6177d4da4ca6503098c7af, type: 3}
-  m_NotificationBehavior: 2
+  m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -386,6 +386,14 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 53640e4f-ec64-473e-9212-237f2ad1bf45
     m_ActionName: Hamster/Interact[/Keyboard/e,/XInputControllerWindows/buttonWest]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a7a028d0-4488-4a46-b2ed-765d9b835fce
+    m_ActionName: Player/Pause[/Keyboard/escape]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5f89e5f7-6663-4e48-a5bc-7c01180acdd3
+    m_ActionName: Hamster/Pause[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
