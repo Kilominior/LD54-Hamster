@@ -3,37 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LiftController : MonoBehaviour, IBaseMechanism
+public class LiftController : TriggerMechanism
 {
     public GameObject[] points;
     public float moveSpeed;
     public bool isMoveOnce;
-    // public GameObject player;
-    // public GameObject pressurePlate;
 
     private bool isMoving;
     private Transform destination;
-    // private ObjectCheck objectCheck;
 
     private void Start()
     {
-        // isPlayerOnLift = false;
-        // if (pressurePlate != null)
-        // {
-        //     objectCheck = pressurePlate.GetComponent<ObjectCheck>();
-        //     // 订阅按下事件
-        //     objectCheck.OnPlatePressed += StartMove;
-
-        //     // 订阅释放事件
-        //     // objectCheck.OnPlateReleased += OnPlateReleased;
-        // }
-        // else
-        // {
-        //     Debug.LogError("ObjectCheck component not found on this object.");
-        // }
-
         GetComponent<LineRenderer>().SetPosition(0, points[0].transform.position);
         GetComponent<LineRenderer>().SetPosition(1, points[1].transform.position);
+    }
+
+    protected override void ExecuteTrigger()
+    {
+        StartMove();
     }
 
     public void StartMove()
@@ -78,10 +65,6 @@ public class LiftController : MonoBehaviour, IBaseMechanism
                 StopMove();
             else
                 StartMove();
-            // isPlayerOnElevator = false;
-
-            // 恢复
-            // player.transform.SetParent(null);
         }
     }
 }

@@ -15,11 +15,29 @@ public class ControlSchemeHint : MonoBehaviour
     [SerializeField]
     private bool showAtRuntime = false;
 
+    [Tooltip("是否在移动端也保持显示")]
+    [SerializeField]
+    private bool showAtMobilePlatform = true;
+
     void Awake()
     {
         EventRegister();
         cg = GetComponent<CanvasGroup>();
-        if(showAtRuntime) Show();
+        if (showAtRuntime)
+        {
+#if UNITY_ANDROID || Unity_IOS
+            if(showAtMobilePlatform)
+            {
+                Show();
+            }
+            else
+            {
+                Hide();
+            }
+#else
+            Show();
+#endif
+        }
         else Hide();
         InitHints();
     }
@@ -61,6 +79,9 @@ public class ControlSchemeHint : MonoBehaviour
                 break;
             case ControlScheme.Gamepad:
                 SetSchemeCanvasGroup(1);
+                break;
+            case ControlScheme.Touchscreen:
+                SetSchemeCanvasGroup(2);
                 break;
         }
     }

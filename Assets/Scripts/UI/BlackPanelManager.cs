@@ -6,61 +6,74 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class BlackPanelManager : MonoBehaviour, IBaseMechanism
+public class BlackPanelManager : TriggerMechanism
 {
     public GameObject blackPanel;
     public GameObject defaultSelectObj;
     public MouseController player;
 
     private Image image;
+    private Color showColor;
     private CanvasGroup canvasGroup;
 
-    private void Awake()
+    private void Start()
     {
         image = blackPanel.GetComponent<Image>();
+        showColor = image.color;
         canvasGroup = blackPanel.GetComponent<CanvasGroup>();
 
-        // 曾经进入过开始菜单，则直接关闭Panel
-        if (PlayerScoreManager.isEnteredStartMenu)
+        // 首次进入开始菜单则显示黑幕
+        if (PlayerScoreManager.isFirstLaunchGame)
         {
-            DecreaseBlack();
+            ShowPanel();
+            PlayerScoreManager.isFirstLaunchGame = false;
+        }
+        else
+        {
+            HidePanel();
         }
 
         EventRegister();
     }
 
-    // 逐渐降低透明度，最终关闭Panel
-    public void DecreaseBlack()
+    private void ShowPanel()
     {
-        StartCoroutine(FadeOut());
+        canvasGroup.alpha = 1;
+        canvasGroup.blocksRaycasts = true;
+        image.color = showColor;
+
+        // 允许控制鼠/球
+        player.RecoverActionMap();
     }
 
-    // 设置Panel至关闭状态，须在player初始化完毕后执行
-    private void HidePanel()
+    // 设置Panel至关闭状态，直接调用需要先判定Panel仍处于开启状态
+    public void HidePanel()
     {
         // 确保最终透明值为0
         canvasGroup.alpha = 0;
+        canvasGroup.blocksRaycasts = false;
         image.color = new Color(0, 0, 0, 0);
-
-        // 将面板设置为不活跃
-        PlayerScoreManager.isEnteredStartMenu = true;
-        blackPanel.SetActive(false);
 
         // 启用UI导航控制
         EventSystem.current.SetSelectedGameObject(defaultSelectObj);
         player.SetActionMapToUI();
     }
 
+    // 逐渐降低透明度，最终关闭Panel
+    private void FadePanel()
+    {
+        StartCoroutine(FadeOut());
+    }
+
     private IEnumerator FadeOut()
     {
         float duration = 2f; // 淡出的时间
         float elapsedTime = 0f;
-        Color initialColor = image.color;
 
         while (elapsedTime < duration)
         {
             // 使用Lerp在一定时间内逐渐改变透明值
-            image.color = Color.Lerp(initialColor, new Color(initialColor.r, initialColor.g, initialColor.b, 0f), elapsedTime / duration);
+            image.color = Color.Lerp(showColor, new Color(showColor.r, showColor.g, showColor.b, 0f), elapsedTime / duration);
             canvasGroup.alpha = image.color.a;
 
             elapsedTime += Time.deltaTime;
@@ -70,6 +83,10 @@ public class BlackPanelManager : MonoBehaviour, IBaseMechanism
         HidePanel();
     }
 
+    protected override void ExecuteTrigger()
+    {
+        FadePanel();
+    }
 
     private void EventRegister()
     {
@@ -78,6 +95,7 @@ public class BlackPanelManager : MonoBehaviour, IBaseMechanism
 
     private void OnGamePause(GamePauseTriggeredEvent @event)
     {
+        if (canvasGroup.alpha != 1.0f) return;
         HidePanel();
     }
 }

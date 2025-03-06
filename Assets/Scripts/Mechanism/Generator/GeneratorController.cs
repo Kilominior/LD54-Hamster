@@ -5,7 +5,8 @@ using UnityEngine;
 public class GeneratorController : BallMountable
 {
     // 与本发电机相连的物体
-    public GameObject connectedObject;
+    [SerializeField]
+    protected TriggerMechanism connectedObject;
 
     // 鼠球锁定时的旋转
     protected Quaternion inRotation;
@@ -23,11 +24,8 @@ public class GeneratorController : BallMountable
     [SerializeField]
     protected AudioClip[] clips;
 
-    protected virtual void Start()
+    private void Start()
     {
-        BindLine();
-        audioSource = GetComponent<AudioSource>();
-
         Initialize();
     }
 
@@ -43,6 +41,9 @@ public class GeneratorController : BallMountable
 
     protected virtual void Initialize()
     {
+        BindLine();
+        audioSource = GetComponent<AudioSource>();
+
         mountAccessState = MountAccessState.MountDenied;
     }
 

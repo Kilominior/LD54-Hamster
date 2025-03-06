@@ -8,19 +8,29 @@ public enum ControlScheme
 {
     None,
     Keyboard,
-    Gamepad
+    Gamepad,
+    Touchscreen
 }
 
 public class ControlManager : SingletonInSceneDontDestroy<ControlManager>
 {
-    private static readonly string KeyboardSchemeName = "Keyboard&Mouse";
-    private static readonly string GamepadSchemeName = "Gamepad";
+    // private static readonly string KeyboardSchemeName = "Keyboard&Mouse";
+    // private static readonly string GamepadSchemeName = "Gamepad";
+    // private static readonly string TouchscreenSchemeName = "Touchscreen";
 
     private ControlScheme currentScheme = ControlScheme.None;
 
     // 在当前控制器变化时调用，更新现在的操作设备
     public void OnControlsUpdate(PlayerInput input)
     {
+#if UNITY_ANDROID || Unity_IOS
+        // 移动平台上仅支持显示触摸屏交互提示
+        if(currentScheme != ControlScheme.Touchscreen)
+        {
+            currentScheme = ControlScheme.Touchscreen;
+            TypeEventSystem.Global.Send(new ControlSchemeChangeEvent(currentScheme));
+        }
+#else
         //Debug.Log("Controls update to " + input.currentControlScheme);
         if (input.currentControlScheme == KeyboardSchemeName)
         {
@@ -36,6 +46,7 @@ public class ControlManager : SingletonInSceneDontDestroy<ControlManager>
         }
 
         TypeEventSystem.Global.Send(new ControlSchemeChangeEvent(currentScheme));
+#endif
     }
 
     /// <summary>

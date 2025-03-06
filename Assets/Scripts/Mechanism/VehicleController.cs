@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class VehicleController : MonoBehaviour, IBaseMechanism
+public class VehicleController : TriggerMechanism
 {
     public enum MoveDirection
     {
@@ -37,6 +37,11 @@ public class VehicleController : MonoBehaviour, IBaseMechanism
         }
     }
 
+    protected override void ExecuteTrigger()
+    {
+        StartMove();
+    }
+
     public void StartMove()
     {
         state = VehicleState.Moving;
@@ -56,6 +61,5 @@ public class VehicleController : MonoBehaviour, IBaseMechanism
     {
         state = VehicleState.Stopped;
         rb.velocity = Vector2.zero;
-        // rb.bodyType = RigidbodyType2D.Kinematic;
     }
 }

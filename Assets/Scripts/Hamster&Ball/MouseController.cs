@@ -71,7 +71,7 @@ public class MouseController : MonoBehaviour
     private DirectionalRush dr;
 
     #region LifeSpan
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();

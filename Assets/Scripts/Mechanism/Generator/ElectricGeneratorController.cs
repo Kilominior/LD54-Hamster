@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class ElectricGeneratorController : GeneratorController
 {
-    // 物体开关状态
-    public bool objectActivated;
+    // 计算对角线角度所需的四元数
+    private static readonly Quaternion halfTurn = Quaternion.Euler(0f, 0f, 180f);
+
     // 没电贴图
     public Sprite darkSprite;
     // 有电贴图
@@ -20,76 +21,38 @@ public class ElectricGeneratorController : GeneratorController
     // 当前已旋转圈数
     private int roundNow;
     // 锁定时旋转的对角线处
-    private Quaternion inverseRotation;
+    private Quaternion reverseRotation;
     // 曾经到达对角处，此次旋转合法
     private bool hasRotated;
     // 判定旋转一周的角度偏移量
     public float angleBias = 1f;
 
-    protected override void Start()
-    {
-        base.Start();
-
-        if (objectActivated) GetComponent<SpriteRenderer>().sprite = lightSprite;
-        else GetComponent<SpriteRenderer>().sprite = darkSprite;
-
-        rotateSignal = transform.Find("RotateSignal").gameObject;
-        rotateSignal.SetActive(false);
-    }
+    private SpriteRenderer sr;
 
     protected override void Initialize()
     {
         base.Initialize();
+        sr = GetComponent<SpriteRenderer>();
+        roundNow = 0;
 
-        UpdateActivatedStatus();
+        rotateSignal = transform.Find("RotateSignal").gameObject;
+        rotateSignal.SetActive(false);
+
+        UpdateActivatedStatus(false);
     }
 
-    // 更新连接电器的开关状态
-    private void UpdateActivatedStatus()
+    // 更新自身的提示灯亮暗以及连接电器的开关状态
+    private void UpdateActivatedStatus(bool activated)
     {
         // TODO 更新线条材质
-        if (objectActivated) GetComponent<SpriteRenderer>().sprite = lightSprite;
-
-
-        // 电灯
-        if (connectedObject.GetComponent<LampController>())
+        if (activated)
         {
-            if (objectActivated)
-            {
-                connectedObject.GetComponent<LampController>().GetComponent<SpriteRenderer>().sprite
-                = connectedObject.GetComponent<LampController>().lightSprite;
-            }
-            //else
-            //{
-            //    connectedObject.GetComponent<LampController>().GetComponent<SpriteRenderer>().sprite
-            //    = connectedObject.GetComponent<LampController>().darkSprite;
-            //}
+            sr.sprite = lightSprite;
+            connectedObject.Trigger();
         }
-        // 电梯
-        else if (connectedObject.GetComponent<LiftController>())
+        else
         {
-            if (objectActivated)
-            {
-                connectedObject.GetComponent<LiftController>().StartMove();
-            }
-            //else
-            //{
-            //    connectedObject.GetComponent<LiftController>().StopMove();
-            //}
-        }
-        // 汽车
-        else if (connectedObject.GetComponent<VehicleController>())
-        {
-            if (objectActivated)
-                connectedObject.GetComponent<VehicleController>().StartMove();
-            // else
-            //     connectedObject.GetComponent<LiftController>().StopMove();
-        }
-        // 黑幕
-        else if (connectedObject.GetComponent<BlackPanelManager>())
-        {
-            if (objectActivated)
-                connectedObject.GetComponent<BlackPanelManager>().DecreaseBlack();
+            sr.sprite = darkSprite;
         }
     }
 
@@ -102,8 +65,8 @@ public class ElectricGeneratorController : GeneratorController
     protected override void StartGenerate()
     {
         inRotation = ball.transform.rotation;
-        inverseRotation = Quaternion.Inverse(inRotation);
-        //Debug.Log("InRotation: "+inRotation.eulerAngles+"   Inversed: "+inverseRotation.eulerAngles);
+        reverseRotation = inRotation * halfTurn;
+        // Debug.Log("InRotation: "+ inRotation.eulerAngles+"   Inversed: "+ this.reverseRotation.eulerAngles);
         //rotateSignal.transform.rotation = Quaternion.FromToRotation(rotateSignal.transform.rotation.eulerAngles, ball.transform.rotation.eulerAngles);
         rotateSignal.gameObject.SetActive(true);
         roundNow = 0;
@@ -119,7 +82,7 @@ public class ElectricGeneratorController : GeneratorController
     {
         //Debug.Log("Rotation of ball: " + ball.transform.rotation + "; --- In Rotation: " + inRotation);
         // 旋转到反向位置，认为旋转有效
-        if (Mathf.Abs((ball.transform.rotation.eulerAngles - inverseRotation.eulerAngles).z) <= angleBias)
+        if (Mathf.Abs((ball.transform.rotation.eulerAngles - reverseRotation.eulerAngles).z) <= angleBias)
         {
             hasRotated = true;
             //Debug.Log("InverseRotation!");
@@ -137,8 +100,7 @@ public class ElectricGeneratorController : GeneratorController
         if (roundNow >= generateRound)
         {
             //Debug.Log(name + ": Electricity Generated!");
-            objectActivated = true;
-            UpdateActivatedStatus();
+            UpdateActivatedStatus(true);
             roundNow = 0;
             hasRotated = false;
         }

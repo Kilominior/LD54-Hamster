@@ -4,7 +4,7 @@ public static class PlayerScoreManager
 {
     public static int levelNums = 4;
     public static int[] scores = { 0, 0, 0, 0 };
-    public static bool isEnteredStartMenu = false;
+    public static bool isFirstLaunchGame = true;
 
     public static void SetScore(int score, int levelNum)
     {
