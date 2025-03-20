@@ -59,8 +59,8 @@ public class CameraManager : MonoBehaviour
             return;
         }
 
-        mainCamera.SetActive(false);
         targetGroupCameraDict[targetGroup].SetActive(true);
+        mainCamera.SetActive(false);
         currentCamera = targetGroupCameraDict[targetGroup];
     }
 

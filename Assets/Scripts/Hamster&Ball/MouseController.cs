@@ -53,9 +53,6 @@ public class MouseController : MonoBehaviour
     private static readonly string hamsterAMName = "Hamster";
     private static readonly string UIAMName = "UI";
     private PlayerInput pi;
-    private InputActionMap ballAM;
-    private InputActionMap hamsterAM;
-    private InputActionMap UIAM;
 
     // 因有Move输入而正在移动中
     private bool isMoving;
@@ -68,7 +65,6 @@ public class MouseController : MonoBehaviour
     private Rigidbody2D brb;
     private SpriteRenderer sr;
     private SkeletonAnimation skeleton;
-    private DirectionalRush dr;
 
     #region LifeSpan
     void Awake()
@@ -77,9 +73,8 @@ public class MouseController : MonoBehaviour
         mouseLeg = transform.Find("PlaneCheck").GetComponent<MouseLegController>();
         skeleton = transform.GetChild(0).GetComponent<SkeletonAnimation>();
         sr = GetComponent<SpriteRenderer>();
-        dr = transform.Find("RushDir").GetComponent<DirectionalRush>();
+        pi = GetComponent<PlayerInput>();
 
-        ActionBinding();
         StateUpdateTo(PlayerState.Ball);
 
         Initialize();
@@ -119,106 +114,33 @@ public class MouseController : MonoBehaviour
             }
         }
     }
-
-    private void OnDestroy()
-    {
-        ActionUnbinding();
-    }
     #endregion
 
     #region Input
-    private void ActionBinding()
-    {
-        pi = GetComponent<PlayerInput>();
-
-        ballAM = pi.actions.actionMaps[0];
-        hamsterAM = pi.actions.actionMaps[1];
-        UIAM = pi.actions.actionMaps[2];
-
-        pi.onControlsChanged += OnControlsUpdate;
-        ControlManager.Instance.InitControlScheme(pi);
-
-        ballAM["Move"].performed += OnMovePerformed;
-        ballAM["Move"].canceled += OnMoveCanceled;
-        ballAM["Jump"].performed += OnJumpPerformed;
-        ballAM["Interact"].performed += OnInteractPerformed;
-        ballAM["SubInteract"].performed += OnSubInteractPerformed;
-        ballAM["AimTrigger"].performed += dr.OnAimTriggerPerformed;
-        ballAM["AimTrigger"].canceled += dr.OnAimTriggerCanceled;
-        ballAM["Aim"].performed += dr.OnAimPerformed;
-        ballAM["Pause"].performed += OnPausePerformed;
-
-        hamsterAM["Move"].performed += OnMovePerformed;
-        hamsterAM["Move"].canceled += OnMoveCanceled;
-        hamsterAM["Jump"].performed += OnJumpPerformed;
-        hamsterAM["Interact"].performed += OnInteractPerformed;
-        hamsterAM["Pause"].performed += OnPausePerformed;
-
-        UIAM["Pause"].performed += OnPausePerformed;
-    }
-
-    private void ActionUnbinding()
-    {
-        pi.onControlsChanged -= OnControlsUpdate;
-
-        ballAM["Move"].performed -= OnMovePerformed;
-        ballAM["Move"].canceled -= OnMoveCanceled;
-        ballAM["Jump"].performed -= OnJumpPerformed;
-        ballAM["Interact"].performed -= OnInteractPerformed;
-        ballAM["SubInteract"].performed -= OnSubInteractPerformed;
-        ballAM["AimTrigger"].performed -= dr.OnAimTriggerPerformed;
-        ballAM["AimTrigger"].canceled -= dr.OnAimTriggerCanceled;
-        ballAM["Aim"].performed -= dr.OnAimPerformed;
-        ballAM["Pause"].performed -= OnPausePerformed;
-
-        hamsterAM["Move"].performed -= OnMovePerformed;
-        hamsterAM["Move"].canceled -= OnMoveCanceled;
-        hamsterAM["Jump"].performed -= OnJumpPerformed;
-        hamsterAM["Interact"].performed -= OnInteractPerformed;
-        hamsterAM["Pause"].performed -= OnPausePerformed;
-
-        UIAM["Pause"].performed -= OnPausePerformed;
-    }
-
-    private void OnControlsUpdate(PlayerInput pi)
-    {
-        ControlManager.Instance.OnControlsUpdate(pi);
-    }
-
-    private void OnMovePerformed(CallbackContext context)
+    public void OnMove(Vector2 force)
     {
         isMoving = true;
-        moveForce = context.ReadValue<Vector2>();
-        //Debug.Log("Is moving: " + moveForce);
+        moveForce = force;
     }
 
-    private void OnMoveCanceled(CallbackContext context)
+    public void OnMoveStop()
     {
         isMoving = false;
-        //Debug.Log("Move canceled!");
     }
 
-    private void OnJumpPerformed(CallbackContext context)
+    public void OnJump()
     {
         Jump();
-        //Debug.Log("Jump performed!");
     }
 
-    private void OnInteractPerformed(CallbackContext context)
+    public void OnInteract()
     {
         ExecuteInteract();
-        //Debug.Log("Interact performed!");
     }
 
-    private void OnSubInteractPerformed(CallbackContext context)
+    public void OnSubInteract()
     {
         ExecuteSubInteract();
-        //Debug.Log("Sub Interact performed!");
-    }
-
-    private void OnPausePerformed(CallbackContext context)
-    {
-        TypeEventSystem.Global.Send<GamePauseTriggeredEvent>();
     }
     #endregion
 

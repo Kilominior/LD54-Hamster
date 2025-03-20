@@ -64,7 +64,7 @@ public class LevelButtonsManager : MonoBehaviour
         UIAM = pi.actions.actionMaps[2];
 
         pi.onControlsChanged += OnControlsUpdate;
-        ControlManager.Instance.InitControlScheme(pi);
+        ControlManager.InitControlScheme(pi);
         UIAM["Pause"].performed += OnPausePerformed;
     }
 
@@ -81,7 +81,7 @@ public class LevelButtonsManager : MonoBehaviour
 
     private void OnControlsUpdate(PlayerInput pi)
     {
-        ControlManager.Instance.OnControlsUpdate(pi);
+        ControlManager.OnControlsUpdate(pi);
     }
 
     private void disableButton(int level)

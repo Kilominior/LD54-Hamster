@@ -79,6 +79,29 @@ public class DirectionalRush : MonoBehaviour
         TimeManager.Instance.ExecuteTimeSlowDown();
     }
 
+    // 瞄准中
+    /// <summary>
+    /// 通过指针的位置变化量决定当前的瞄准方向，输入的vector应为指针的变化原始值
+    /// </summary>
+    private void AimByDelta(Vector2 delta)
+    {
+        if (!isAiming) return;
+        // 计算并更新当前的方向向量
+        deltaDirVector = delta;
+        dirVector += deltaDirVector / 5.0f;
+        // dirVector += deltaDirVector;
+        // Debug.Log("delta: " + deltaDirVector + ", DirVector: " + dirVector);
+    }
+
+    /// <summary>
+    /// 通过推动摇杆的距离决定当前的瞄准方向，输入的vector应为0~1之间的值
+    /// </summary>
+    private void AimByPushAmount(Vector2 amount)
+    {
+        if (!isAiming) return;
+        dirVector = amount * dirLength;
+    }
+
     // 结束瞄准
     private void EndAiming(bool canceled = false)
     {
@@ -118,23 +141,23 @@ public class DirectionalRush : MonoBehaviour
         dirRenderer.SetPosition(1, dirEndPos);
     }
 
-    public void OnAimPerformed(CallbackContext context)
-    {
-        if (!isAiming) return;
-        // 计算并更新当前的方向向量
-        deltaDirVector = context.ReadValue<Vector2>();
-        dirVector += deltaDirVector / 5.0f;
-    }
-
-
-    public void OnAimTriggerPerformed(CallbackContext context)
+    public void OnAimStart()
     {
         StartAiming();
     }
 
-    public void OnAimTriggerCanceled(CallbackContext context)
+    public void OnAimByDelta(Vector2 delta)
+    {
+        AimByDelta(delta);
+    }
+
+    public void OnAimByPushAmount(Vector2 amount)
+    {
+        AimByPushAmount(amount);
+    }
+
+    public void OnAimEnd()
     {
         EndAiming();
     }
-
 }
