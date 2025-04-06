@@ -67459,6 +67459,26 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2816451072231525727, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: inputHandler
+      value: 
+      objectReference: {fileID: 1868949339}
+    - target: {fileID: 6642571416664282545, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6642571416664282545, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6642571416664282545, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6642571416664282545, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8510143207269930552, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
       propertyPath: m_Camera
       value: 
@@ -67639,6 +67659,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: Level 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8890361667491798275, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890361667491798275, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890361667491798275, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8890361667491798275, guid: b804bf8b1f63e6843b09af26c1e034b5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -67779,6 +67815,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3634d70302526d249871cdf80b984d20, type: 3}
+--- !u!114 &1868949339 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7250304300362760396, guid: 3634d70302526d249871cdf80b984d20, type: 3}
+  m_PrefabInstance: {fileID: 1868949338}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5f1afc2680216740875e6b35a0a4871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1870038096
 GameObject:
   m_ObjectHideFlags: 0

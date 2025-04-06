@@ -11,6 +11,8 @@ public class BlackPanelManager : TriggerMechanism
     public GameObject blackPanel;
     public GameObject defaultSelectObj;
     public MouseController player;
+    public OnScreenControlPanel onScreenControlPanel;
+    public Button SkipButton;
 
     private Image image;
     private Color showColor;
@@ -21,6 +23,11 @@ public class BlackPanelManager : TriggerMechanism
         image = blackPanel.GetComponent<Image>();
         showColor = image.color;
         canvasGroup = blackPanel.GetComponent<CanvasGroup>();
+
+        SkipButton.onClick.AddListener(() => {
+            HidePanel();
+            SkipButton.gameObject.SetActive(false);
+        });
 
         // 首次进入开始菜单则显示黑幕
         if (PlayerScoreManager.isFirstLaunchGame)
@@ -53,6 +60,13 @@ public class BlackPanelManager : TriggerMechanism
         canvasGroup.alpha = 0;
         canvasGroup.blocksRaycasts = false;
         image.color = new Color(0, 0, 0, 0);
+
+        SkipButton.gameObject.SetActive(false);
+
+#if UNITY_ANDROID || UNITY_IOS
+        // 关闭虚拟手柄
+        onScreenControlPanel.Hide();
+#endif
 
         // 启用UI导航控制
         EventSystem.current.SetSelectedGameObject(defaultSelectObj);

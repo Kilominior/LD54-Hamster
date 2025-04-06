@@ -1,4 +1,5 @@
 using System.Collections;
+using QFramework;
 using UnityEngine;
 
 /// <summary>
@@ -151,6 +152,8 @@ public class BallMountable : MonoBehaviour, IInteractable, ITargetGroup
     {
         outsideInteractHint.Show();
         insideInteractHint.Hide();
+
+        TypeEventSystem.Global.Send(new ShowInteractHintEvent(outsideInteractHint));
     }
 
     // 显示离开按键提示
@@ -158,6 +161,8 @@ public class BallMountable : MonoBehaviour, IInteractable, ITargetGroup
     {
         outsideInteractHint.Hide();
         insideInteractHint.Show();
+
+        TypeEventSystem.Global.Send(new ShowInteractHintEvent(insideInteractHint));
     }
 
     // 隐藏所有按键提示
@@ -165,6 +170,8 @@ public class BallMountable : MonoBehaviour, IInteractable, ITargetGroup
     {
         outsideInteractHint.Hide();
         insideInteractHint.Hide();
+
+        TypeEventSystem.Global.Send<HideInteractHintEvent>();
     }
 
     /// <summary>

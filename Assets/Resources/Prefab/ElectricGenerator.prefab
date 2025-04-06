@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 659beb6f840192e4e991825e06f53df9, type: 3}
+  m_Sprite: {fileID: 1335416495, guid: 3600c0771c543f14082856ba2251fbd1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -746,7 +746,6 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 7f4c54da874d4984a8d5d69cea2f4aba, type: 3}
   - {fileID: 8300000, guid: 9e722b120c69bf94dab006f908060230, type: 3}
   - {fileID: 8300000, guid: ce8e86a6f3c88544bb5a85a3627b0e9b, type: 3}
-  objectActivated: 0
   darkSprite: {fileID: 21300000, guid: d66593ac2875bac42b26aec817b35ab2, type: 3}
   lightSprite: {fileID: 21300000, guid: 7b47b4099872d1a4bba3c94af9bbf1e4, type: 3}
   generateRound: 3
@@ -1037,6 +1036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showAtRuntime: 0
+  showAtMobilePlatform: 1
 --- !u!225 &5754193581714592967
 CanvasGroup:
   m_ObjectHideFlags: 0
