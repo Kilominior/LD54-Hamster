@@ -6,18 +6,41 @@ using QFramework;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
+using UnityEngine.UI;
 
 public class PanelManager : SingletonMono<PanelManager>
 {
     public int levelNum;
     [SerializeField]
+    private Button pauseButton;
+    [SerializeField]
     private CanvasGroup pausePanel;
+    [SerializeField]
+    private Button restartButton;
+    [SerializeField]
+    private Button menuButton;
+    [SerializeField]
+    private Button continueButton;
     public GameObject pauseSelectedObj;
     public GameObject victoryPanel;
     public MouseController mouseController;
 
     private void Start()
     {
+#if UNITY_ANDROID || UNITY_IOS
+        pauseButton.GetComponent<CanvasGroup>().Show();
+        pauseButton.onClick.AddListener(GamePause);
+#else
+        pauseButton.GetComponent<CanvasGroup>().Hide();
+#endif
+        restartButton.onClick.AddListener(() => {
+            SceneLoader.LoadCurrentScene();
+        });
+        menuButton.onClick.AddListener(() => {
+            SceneLoader.LoadScene(1);
+        });
+        continueButton.onClick.AddListener(GameContinue);
+
         DisablePausePanel();
         victoryPanel.SetActive(false);
 
@@ -64,14 +87,12 @@ public class PanelManager : SingletonMono<PanelManager>
 
     private void EnablePausePanel()
     {
-        pausePanel.alpha = 1.0f;
-        pausePanel.blocksRaycasts = true;
+        pausePanel.Show();
     }
 
     public void DisablePausePanel()
     {
-        pausePanel.alpha = 0;
-        pausePanel.blocksRaycasts = false;
+        pausePanel.Hide();
     }
 
     private void EventRegister()

@@ -14,8 +14,6 @@ public class LevelButtonsManager : MonoBehaviour
     public Sprite disabledButton;
     public Sprite[] scores;
 
-    [SerializeField]
-    private SceneLoader sceneLoader;
     private PlayerInput pi;
     private InputActionMap UIAM;
 
@@ -32,6 +30,11 @@ public class LevelButtonsManager : MonoBehaviour
         bool selectedObjSet = false;
         for (int i = 0; i < levelButtons.Length; i++)
         {
+            int tmp = i + 2;
+            levelButtons[i].GetComponent<Button>().onClick.AddListener(() => {
+                SceneLoader.LoadScene(tmp);
+            });
+
             // if (PlayerScoreManager.GetScore(i) > 0 || i == 0)
             // {
             //     enableButton(i);
@@ -76,7 +79,7 @@ public class LevelButtonsManager : MonoBehaviour
 
     private void OnPausePerformed(InputAction.CallbackContext context)
     {
-        sceneLoader.LoadScene("Start Menu");
+        SceneLoader.LoadScene("Start Menu");
     }
 
     private void OnControlsUpdate(PlayerInput pi)

@@ -13,6 +13,7 @@ public class BlackPanelManager : TriggerMechanism
     public MouseController player;
     public OnScreenControlPanel onScreenControlPanel;
     public Button SkipButton;
+    public Button StartButton;
 
     private Image image;
     private Color showColor;
@@ -27,6 +28,10 @@ public class BlackPanelManager : TriggerMechanism
         SkipButton.onClick.AddListener(() => {
             HidePanel();
             SkipButton.gameObject.SetActive(false);
+        });
+
+        StartButton.onClick.AddListener(() => {
+            SceneLoader.LoadScene(1);
         });
 
         // 首次进入开始菜单则显示黑幕
